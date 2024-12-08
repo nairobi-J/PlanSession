@@ -3,14 +3,14 @@ import React from 'react';
 const Home = ({ openModal }) => {
   return (
     <>
-    <div className="flex bg-gradient-to-r from-blue-200 via-purple-200 to-pink-200 h-screen p-10">
+    <div className="flex bg-gradient-to-r  from-green-400 to-green-100 h-screen p-10">
     <img
             src="logo.png" // Replace with actual image if available
             alt="Saikat Singha"
             className="w-32 h-32 mx-auto rounded-full mb-4"
           />
       {/* Left side of the page */}
-      <div className="w-1/3 p-4">
+      <div className="w-1/3 p-4 mt-10">
         <div className="mb-20 shadow-lg p-2 rounded-lg">
           <h1>Take a Break</h1>
           <br />
@@ -22,14 +22,14 @@ const Home = ({ openModal }) => {
         {/* Buttons for Sign In options */}
         <div className="flex flex-col justify-center items-center">
           <button
-            className="p-2 bg-blue-300 shadow-lg mb-4 w-1/3"
+            className="p-2  shadow-lg mb-4 w-1/3"
             onClick={() => openModal('guest')}
           >
             Sign Up As Host
           </button>
           <p className="mb-4">Or</p>
           <button
-            className="p-2 bg-blue-300 shadow-lg w-1/3"
+            className="p-2  shadow-lg w-1/3"
             onClick={() => openModal('host')}
           >
             Sign Up As Guest
@@ -47,7 +47,7 @@ const Home = ({ openModal }) => {
           />
           <p className="text-center mb-4">Join Our Community.......</p>
           <button
-            className="p-2 bg-blue-300 shadow-lg w-1/3"
+            className="p-2  shadow-xl w-1/3"
             onClick={() => openModal('login')}
           >
             Log In
@@ -57,7 +57,7 @@ const Home = ({ openModal }) => {
     </div>
 
   
-    <div className=" px-6 py-10 bg-gradient-to-r from-blue-200 via-purple-200 to-pink-200 shadow-xl rounded-lg">
+    <div className=" px-6 py-10 bg-gradient-to-r  from-green-400 via-green-300  to-green-100 shadow-xl rounded-lg">
       <h2 className="text-3xl font-bold text-center mb-6">About Us</h2>
       <p className="text-lg leading-8 text-center mb-6">
         We are a team of dedicated software engineers from <strong>Shahjalal University of Science and Technology (SUST)</strong>.
