@@ -62,7 +62,14 @@ app.post("/api/signup", async (req, res) => {
   
 
   app.post("/api/login", async (req, res) => {
-    const { name, password } = req.body;
+  //  const { name, password } = req.body;
+    console.log(req.body);
+    
+
+    const name = req.body.fName
+    const password = req.body.fPass
+    console.log(name)
+    console.log(password)
     try {
       const connection = await mysql.createConnection(dbConfig);
   

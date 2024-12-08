@@ -115,20 +115,26 @@ const Modal = ({ onClose, modalType }) => {
     
     console.log(formData.name + " " + formData.password)
 
+    const fName = formData.name;
+    const fPass = formData.password;
+
     try {
-      const response = await axios.post('http://localhost:5000/api/login', formData);
+      const response = await axios.post('http://localhost:5000/api/login', {fName, fPass});
      
+      console.log(response.data)
 
       if (response.data.success) {
-        setMessage('Successfully signed up!');
+        setMessage('Successfully logged in!');
       } else {
         console.log(error)
-        setMessage(response.data?.msg || 'Error signing up');
+        setMessage(response.data?.msg || 'Error loggin in');
       }
+
+      localStorage.setItem('token', response.data.token)
   
   } catch (error) {
       console.log(error)
-      setMessage(error.response?.data?.msg || 'Error signing in');
+      setMessage(error.response?.data?.msg || 'Error logging in');
   }
 
     // Successful login or sign-up
