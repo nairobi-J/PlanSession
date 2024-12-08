@@ -8,6 +8,7 @@ import AnalyticsPage from './pages/AnalyticsPage'; // Your AnalyticsPage compone
 import NotificationsPage from './pages/NotificationsPage'; // Your NotificationsPage component
 import Home from './pages/Home';
 import Modal from './components/Modal'; 
+import Create from './pages/Create';
 
 const App = () => {
   
@@ -34,6 +35,7 @@ const App = () => {
           <Route path="meetings" element={<MeetingsPage />} />
           <Route path="analytics" element={<AnalyticsPage />} />
           <Route path="notifications" element={<NotificationsPage />} />
+          <Route path="create" element={<Create/>} />
         </Route>
         
         {/* Home route */}
