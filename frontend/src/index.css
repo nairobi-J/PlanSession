@@ -43,9 +43,14 @@ h1 {
 
 
 button{
-  border-radius: 6%;
+  
+  background-color: black;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 6px;
   &:hover{
-    background-color: rgb(207, 210, 212);
+    background-color: rgb(255, 255, 255);
+    color: black;
   }
 }
 

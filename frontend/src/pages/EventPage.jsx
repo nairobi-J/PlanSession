@@ -9,7 +9,7 @@ const EventPage = () => {
   ]);
 
   return (
-    <div className="p-6 bg-gray-100 min-h-screen">
+    <div className="p-6  min-h-screen">
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-4xl font-bold text-gray-800 text-center">
@@ -21,7 +21,7 @@ const EventPage = () => {
       </div>
 
       {/* Meeting List */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-6">
         {meetings.map((meeting) => (
           <div
             key={meeting.id}
