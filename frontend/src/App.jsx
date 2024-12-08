@@ -1,10 +1,16 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Main from './pages/Main'; // Your Main Component
+import EventPage from './pages/EventPage'; // Your EventPage component
+import AvailabilityPage from './pages/AvailabilityPage'; // Your AvailabilityPage component
+import MeetingsPage from './pages/MeetingsPage'; // Your MeetingsPage component
+import AnalyticsPage from './pages/AnalyticsPage'; // Your AnalyticsPage component
+import NotificationsPage from './pages/NotificationsPage'; // Your NotificationsPage component
 import Home from './pages/Home';
-import Main from './pages/Main';
-import Modal from './components/Modal'; // Import Modal component
+import Modal from './components/Modal'; 
 
 const App = () => {
+  
   const [isModalVisible, setIsModalVisible] = useState(false); // Modal visibility state
   const [modalType, setModalType] = useState(''); // For controlling modal type (guest or host)
 
@@ -17,42 +23,29 @@ const App = () => {
   const closeModal = () => {
     setIsModalVisible(false); // Close modal
   };
-
   return (
     <Router>
-      <div>
-        {/* Navbar */}
-        <nav className="flex justify-between items-center p-6 bg-blue-400 text-white">
-          {/* Logo */}
-          <img
-            src='/logo.png'
-            alt='Logo'
-            className="h-full w-auto max-h-20"
-          />
-
-          {/* Button to open the Log In modal */}
-          <button
-            onClick={() => openModal('login')} // Open login modal for username and password
-            className="px-4 p-3 bg-blue-300 hover:bg-blue-600 rounded-lg text-black"
-          >
-            Log In
-          </button>
-        </nav>
-
-        {/* Routes */}
-        <Routes>
-          <Route path="/" element={<Home openModal={openModal} />} />
-          <Route path="/main" element={<Main />} />
-        </Routes>
-
-        {/* Modal Component */}
-        {isModalVisible && (
+      <Routes>
+        {/* Define the Main route as the parent route */}
+        <Route path="/main" element={<Main />}>
+          {/* Define the nested routes for content rendering */}
+          <Route path="event" element={<EventPage />} />
+          <Route path="availability" element={<AvailabilityPage />} />
+          <Route path="meetings" element={<MeetingsPage />} />
+          <Route path="analytics" element={<AnalyticsPage />} />
+          <Route path="notifications" element={<NotificationsPage />} />
+        </Route>
+        
+        {/* Home route */}
+        <Route path="/" element={<Home openModal={openModal} />} />
+        
+      </Routes>
+      {isModalVisible && (
           <Modal
             onClose={closeModal} // Close modal logic
             modalType={modalType} // Pass modal type (login, guest, host)
           />
         )}
-      </div>
     </Router>
   );
 };

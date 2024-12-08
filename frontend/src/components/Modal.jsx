@@ -14,25 +14,6 @@ const Modal = ({ onClose, modalType }) => {
   //const [countries, setCountries] = useState([]);
   const navigate = useNavigate();
 
-<<<<<<< Updated upstream
-  useEffect(() => {
-    if (modalType === 'guest' || modalType === 'host') {
-      // Fetch a list of countries with their respective timezones (only for guest/host)
-      fetch('https://world-time1.p.rapidapi.com/timezone')
-        .then((response) => response.json())
-        .then((data) => {
-          const countries = data.map((country) => ({
-            name: country.name,
-            timezone: country.timezone,
-          }));
-          setCountries(countries);
-        })
-        .catch((error) => {
-          console.error('Error fetching countries:', error);
-        });
-    }
-  }, [modalType]);
-=======
   
   const [searchInput, setSearchInput] = useState("");
   const [filteredZones, setFilteredZones] = useState([]);
@@ -53,20 +34,13 @@ const Modal = ({ onClose, modalType }) => {
   //       console.error('Error fetching countries:', error);
   //     });
   // }, []);
->>>>>>> Stashed changes
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
 
-<<<<<<< Updated upstream
-    // Auto-update timezone when a country is selected
-    if (name === 'country') {
-      const country = countries.find((c) => c.name === value);
-=======
     if (name === 'timezone') {
     
->>>>>>> Stashed changes
       setFormData((prevData) => ({
         ...prevData,
         [timezone]: value
@@ -95,19 +69,12 @@ const Modal = ({ onClose, modalType }) => {
   const handleSubmit = async(e) => {
     e.preventDefault();
 
-<<<<<<< Updated upstream
-    // Validation logic
-    if (!formData.username || !formData.password) {
-=======
     // Validation logic for Login and Sign Up
     if (!formData.name || !formData.password) {
->>>>>>> Stashed changes
       alert('Username and password are required.');
       return;
     }
 
-<<<<<<< Updated upstream
-=======
     // If modal type is 'host', check email as well
     if (modalType === 'host' && !formData.email) {
       alert('Email is required for Host.');
@@ -131,7 +98,6 @@ const Modal = ({ onClose, modalType }) => {
       setMessage(error.response?.data?.msg || 'Error signing in');
   }
 
->>>>>>> Stashed changes
     // Successful login or sign-up
     onClose(); // Close modal after success
     navigate('/main');
@@ -193,40 +159,6 @@ const Modal = ({ onClose, modalType }) => {
           />
         </div>
 
-<<<<<<< Updated upstream
-        {/* Country and Timezone (only for guest/host) */}
-        {(modalType === 'guest' || modalType === 'host') && (
-          <>
-            <div className="flex items-center gap-4 w-full">
-              <label className="w-1/3">Country:</label>
-              <select
-                name="country"
-                value={formData.country}
-                onChange={handleChange}
-                className="border p-2 rounded-md w-2/3"
-              >
-                <option value="">Select Country</option>
-                {countries.map((country, index) => (
-                  <option key={index} value={country.name}>
-                    {country.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div className="flex items-center gap-4 w-full">
-              <label className="w-1/3">Timezone:</label>
-              <input
-                type="text"
-                name="timezone"
-                value={formData.timezone}
-                readOnly
-                className="border p-2 rounded-md w-2/3"
-              />
-            </div>
-          </>
-        )}
-=======
         {/* Country and Timezone (only for Guest or Host) */}
         {(modalType === "guest" || modalType === "host") && (
       <>
@@ -257,14 +189,32 @@ const Modal = ({ onClose, modalType }) => {
         </div>
       </>
     )}
->>>>>>> Stashed changes
+    {modalType === 'login' && 
+      ( <button
+       type="submit"
+       className="bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-lg w-full"
+     >
+       Log In
+     </button>)
+    }
+    {modalType === 'guest' && 
+      ( <button
+       type="submit"
+       className="bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-lg w-full"
+     >
+       Guest Sign In
+     </button>)
+    }
+    {modalType === 'host' && 
+      ( <button
+       type="submit"
+       className="bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-lg w-full"
+     >
+       Host Sign In
+     </button>)
+    }
 
-        <button
-          type="submit"
-          className="bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-lg w-full"
-        >
-          Submit
-        </button>
+        
       </form>
     </div>
   );
