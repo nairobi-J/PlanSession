@@ -1,19 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-
+import {zones} from '../resource.js'
+import axios from 'axios';
 const Modal = ({ onClose, modalType }) => {
   const [formData, setFormData] = useState({
-    username: '',
+    name: '',
     email: '',
     password: '',
-    country: '',
     timezone: '',
   });
 
-  const [countries, setCountries] = useState([]);
+  //const [countries, setCountries] = useState([]);
   const navigate = useNavigate();
 
+<<<<<<< Updated upstream
   useEffect(() => {
     if (modalType === 'guest' || modalType === 'host') {
       // Fetch a list of countries with their respective timezones (only for guest/host)
@@ -31,30 +32,106 @@ const Modal = ({ onClose, modalType }) => {
         });
     }
   }, [modalType]);
+=======
+  
+  const [searchInput, setSearchInput] = useState("");
+  const [filteredZones, setFilteredZones] = useState([]);
+  const[message, setMessage] = useState("")
+
+  // useEffect(() => {
+  //   // Fetch a list of countries with their respective timezones
+  //   fetch('https://world-time1.p.rapidapi.com/timezone')
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       const countries = data.map((country) => ({
+  //         name: country.name,
+  //         timezone: country.timezone,
+  //       }));
+  //       setCountries(countries);
+  //     })
+  //     .catch((error) => {
+  //       console.error('Error fetching countries:', error);
+  //     });
+  // }, []);
+>>>>>>> Stashed changes
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
 
+<<<<<<< Updated upstream
     // Auto-update timezone when a country is selected
     if (name === 'country') {
       const country = countries.find((c) => c.name === value);
+=======
+    if (name === 'timezone') {
+    
+>>>>>>> Stashed changes
       setFormData((prevData) => ({
         ...prevData,
-        timezone: country ? country.timezone : '',
+        [timezone]: value
       }));
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleInputChange = (e) => {
+    const input = e.target.value;
+    setSearchInput(input);
+
+    // Filter zones based on input
+    const filtered = zones.filter((country) =>
+      country.toLowerCase().includes(input.toLowerCase())
+    );
+    setFilteredZones(filtered);
+  };
+
+  const handleSelect = (timezone) => {
+    setFormData((prev) => ({ ...prev, timezone }));
+    setSearchInput(timezone); // Update input to the selected value
+    setFilteredZones([]); // Clear suggestions
+  };
+
+
+  const handleSubmit = async(e) => {
     e.preventDefault();
 
+<<<<<<< Updated upstream
     // Validation logic
     if (!formData.username || !formData.password) {
+=======
+    // Validation logic for Login and Sign Up
+    if (!formData.name || !formData.password) {
+>>>>>>> Stashed changes
       alert('Username and password are required.');
       return;
     }
 
+<<<<<<< Updated upstream
+=======
+    // If modal type is 'host', check email as well
+    if (modalType === 'host' && !formData.email) {
+      alert('Email is required for Host.');
+      return;
+    }
+    console.log(formData)
+
+    try {
+      const response = await axios.post('http://localhost:5000/api/signup', formData);
+     
+
+      if (response.data.success) {
+        setMessage('Successfully signed up!');
+      } else {
+        console.log(error)
+        setMessage(response.data?.msg || 'Error signing up');
+      }
+  
+  } catch (error) {
+      console.log(error)
+      setMessage(error.response?.data?.msg || 'Error signing in');
+  }
+
+>>>>>>> Stashed changes
     // Successful login or sign-up
     onClose(); // Close modal after success
     navigate('/main');
@@ -80,8 +157,8 @@ const Modal = ({ onClose, modalType }) => {
           <label className="w-1/3">Username:</label>
           <input
             type="text"
-            name="username"
-            value={formData.username}
+            name="name"
+            value={formData.name}
             onChange={handleChange}
             placeholder="Enter your Username"
             className="border p-2 rounded-md w-2/3"
@@ -116,6 +193,7 @@ const Modal = ({ onClose, modalType }) => {
           />
         </div>
 
+<<<<<<< Updated upstream
         {/* Country and Timezone (only for guest/host) */}
         {(modalType === 'guest' || modalType === 'host') && (
           <>
@@ -148,6 +226,38 @@ const Modal = ({ onClose, modalType }) => {
             </div>
           </>
         )}
+=======
+        {/* Country and Timezone (only for Guest or Host) */}
+        {(modalType === "guest" || modalType === "host") && (
+      <>
+        <div className="flex flex-col gap-2 justify-center items-baseline">
+          <label>TimeZone:</label>
+          <input
+            type="text"
+            name="timezone"
+            value={searchInput}
+            onChange={handleInputChange}
+            className="border p-2 rounded-md"
+            placeholder="Type to search..."
+          />
+          {/* Suggestions Dropdown */}
+          {filteredZones.length > 0 && (
+            <ul className="border p-2 rounded-md max-h-40 overflow-y-auto">
+              {filteredZones.map((zone, index) => (
+                <li
+                  key={index}
+                  className="cursor-pointer hover:bg-gray-200 p-1"
+                  onClick={() => handleSelect(zone)}
+                >
+                  {zone}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </>
+    )}
+>>>>>>> Stashed changes
 
         <button
           type="submit"
