@@ -21,7 +21,7 @@ const Main = () => {
 
   const navigate = useNavigate();
   return (
-    <div className="flex ">
+    <div className="flex w-30%">
       {/* Sidebar / Dashboard */}
       <div
         className={` p-4 transition-all bg-black text-white ${isDashboardCollapsed ? 'w-10' : 'w-64'}`}
@@ -52,6 +52,10 @@ const Main = () => {
           <Link to="create" className="text-white hover:text-blue-900">
             Create 
           </Link>
+          <Link to="profile" className="text-white hover:text-blue-900">
+            
+          </Link>
+          
         </div>
         <button
           onClick={toggleDashboardSize}
@@ -62,7 +66,7 @@ const Main = () => {
       </div>
 
       {/* Main Content Section */}
-      <div className="flex-1 p-6  w-1/2">
+      <div className="flex-1 p-6  w-70%">
         {/* Search Bar - Positioned at the top of the content */}
         <div className={`flex justify-center items-center mb-4 transition-all duration-300 ${isSearchCollapsed ? 'h-10' : 'h-16'}`}>
   <div className="flex items-center border border-gray-300 rounded-lg p-2 w-1/2 bg-white">
