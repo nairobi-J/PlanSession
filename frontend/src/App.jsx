@@ -32,7 +32,7 @@ const App = () => {
 
           {/* Button to open the Log In modal */}
           <button
-            onClick={() => openModal('host')} // Open login modal as host
+            onClick={() => openModal('login')} // Open login modal for username and password
             className="px-4 p-3 bg-blue-300 hover:bg-blue-600 rounded-lg text-black"
           >
             Log In
@@ -49,7 +49,7 @@ const App = () => {
         {isModalVisible && (
           <Modal
             onClose={closeModal} // Close modal logic
-            modalType={modalType} // Pass modal type (guest or host)
+            modalType={modalType} // Pass modal type (login, guest, host)
           />
         )}
       </div>
