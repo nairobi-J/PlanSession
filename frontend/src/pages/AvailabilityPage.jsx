@@ -1,132 +1,225 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import Calendar from "react-calendar"; // Importing calendar component from react-calendar
+import "react-calendar/dist/Calendar.css"; // Minimal calendar styles
 
 const AvailabilityPage = () => {
-  // State for storing availability information
-  const [availability, setAvailability] = useState([
-    { day: "Monday", unavailable: false, times: [] },
-    { day: "Tuesday", unavailable: false, times: [] },
-    { day: "Wednesday", unavailable: false, times: [] },
-    { day: "Thursday", unavailable: false, times: [] },
-    { day: "Friday", unavailable: false, times: [] },
-    { day: "Saturday", unavailable: false, times: [] },
-    { day: "Sunday", unavailable: false, times: [] },
-  ]);
+  const [availability, setAvailability] = useState({});
+  const [newSlot, setNewSlot] = useState({
+    date: "",
+    startTime: "",
+    endTime: "",
+    description: "",
+  });
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [viewMode, setViewMode] = useState("month"); // State to track calendar view mode
 
-  // Handle toggling availability for a day
-  const toggleDayAvailability = (index) => {
-    const updatedAvailability = [...availability];
-    updatedAvailability[index].unavailable =
-      !updatedAvailability[index].unavailable;
-    if (updatedAvailability[index].unavailable) {
-      updatedAvailability[index].times = []; // Reset times when marking day unavailable
+  // Load availability from local storage on component mount
+  useEffect(() => {
+    const savedAvailability = localStorage.getItem("availability");
+    if (savedAvailability) {
+      setAvailability(JSON.parse(savedAvailability));
     }
-    setAvailability(updatedAvailability);
+  }, []);
+
+  // Save availability to local storage whenever it changes
+  useEffect(() => {
+    localStorage.setItem("availability", JSON.stringify(availability));
+  }, [availability]);
+
+  const handleAddSlot = () => {
+    // Validate input
+    if (!newSlot.date || !newSlot.startTime || !newSlot.endTime) {
+      alert("Please enter date, start time, and end time");
+      return;
+    }
+
+    // Check if the selected date is in the past
+    const selectedDateObj = new Date(newSlot.date);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Set to start of the day for comparison
+
+    if (selectedDateObj < today) {
+      alert("You cannot add availability for past dates");
+      return;
+    }
+
+    // Create new availability slot
+    const newAvailabilitySlot = {
+      id: Date.now(),
+      startTime: newSlot.startTime,
+      endTime: newSlot.endTime,
+      description: newSlot.description,
+    };
+
+    // Update availability for the selected date
+    setAvailability((prev) => ({
+      ...prev,
+      [newSlot.date]: [...(prev[newSlot.date] || []), newAvailabilitySlot],
+    }));
+
+    // Reset input fields
+    setNewSlot({
+      date: "",
+      startTime: "",
+      endTime: "",
+      description: "",
+    });
   };
 
-  // Handle adding a specific time to a day
-  const addTime = (index, time) => {
-    const updatedAvailability = [...availability];
-    updatedAvailability[index].times.push(time);
-    setAvailability(updatedAvailability);
+  const handleRemoveSlot = (date, id) => {
+    setAvailability((prev) => ({
+      ...prev,
+      [date]: prev[date].filter((slot) => slot.id !== id),
+    }));
   };
 
-  // Handle removing a specific time from a day
-  const removeTime = (index, time) => {
-    const updatedAvailability = [...availability];
-    updatedAvailability[index].times = updatedAvailability[index].times.filter(
-      (t) => t !== time,
-    );
-    setAvailability(updatedAvailability);
+  const handleEditSlot = (date, id) => {
+    const slotToEdit = availability[date].find((slot) => slot.id === id);
+    setNewSlot({
+      date,
+      startTime: slotToEdit.startTime,
+      endTime: slotToEdit.endTime,
+      description: slotToEdit.description,
+    });
+    // Optionally, remove the slot before editing or handle differently
+    handleRemoveSlot(date, id);
+  };
+
+  const renderAvailabilitySlots = (date) => {
+    return availability[date].map((slot) => (
+      <div
+        key={slot.id}
+        className="flex justify-between items-center bg-gray-100 p-2 rounded mb-2"
+      >
+        <div>
+          <span className="font-bold">
+            {slot.startTime} - {slot.endTime}
+          </span>
+          {slot.description && (
+            <p className="text-sm text-gray-600">{slot.description}</p>
+          )}
+        </div>
+        <div>
+          <button
+            onClick={() => handleEditSlot(date, slot.id)}
+            className="text-blue-500 hover:text-blue-700 mr-2"
+          >
+            Edit
+          </button>
+          <button
+            onClick={() => handleRemoveSlot(date, slot.id)}
+            className="text-red-500 hover:text-red-700"
+          >
+            Remove
+          </button>
+        </div>
+      </div>
+    ));
+  };
+
+  const onDateChange = (date) => {
+    setSelectedDate(date);
+    setNewSlot((prev) => ({ ...prev, date: date.toISOString().split("T")[0] }));
+  };
+
+  const toggleViewMode = (mode) => {
+    setViewMode(mode);
   };
 
   return (
-    <div className="p-6   min-h-screen">
-      {/* Header */}
-      <div className="mb-8 text-center">
-        <h1 className="text-4xl font-bold text-gray-800">
-          Manage Availability
-        </h1>
-        <p className="text-gray-600 mt-2">
-          Select days and times when you are unavailable.
-        </p>
+    <div className="container mx-auto p-6">
+      <h1 className="text-3xl font-bold mb-6 text-center">
+        My Availability Schedule
+      </h1>
+
+      {/* View Mode Toggle */}
+      <div className="mb-4 flex justify-center gap-4">
+        <button
+          onClick={() => toggleViewMode("month")}
+          className={`px-4 py-2 rounded ${viewMode === "month" ? "bg-blue-500 text-white" : "bg-gray-300"}`}
+        >
+          Monthly View
+        </button>
+        <button
+          onClick={() => toggleViewMode("week")}
+          className={`px-4 py-2 rounded ${viewMode === "week" ? "bg-blue-500 text-white" : "bg-gray-300"}`}
+        >
+          Weekly View
+        </button>
       </div>
 
-      {/* Days List */}
-      <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-4 gap-6">
-        {availability.map((day, index) => (
-          <div
-            key={day.day}
-            className="bg-white shadow-md rounded-xl p-6 border hover:shadow-xl transition-shadow"
-          >
-            {/* Day Header */}
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-2xl font-semibold text-gray-800">
-                {day.day}
-              </h2>
-              <button
-                onClick={() => toggleDayAvailability(index)}
-                className={`px-4 py-2 rounded-lg text-white ${
-                  day.unavailable
-                    ? "bg-red-500 hover:bg-red-600"
-                    : "bg-green-500 hover:bg-green-600"
-                }`}
-              >
-                {day.unavailable ? "Unavailable" : "Available"}
-              </button>
-            </div>
 
-            {/* Time Management */}
-            {!day.unavailable && (
-              <>
-                <div className="space-y-2">
-                  <h3 className="text-gray-700 font-medium">
-                    Unavailable Times:
-                  </h3>
-                  {day.times.length > 0 ? (
-                    <ul className="space-y-2">
-                      {day.times.map((time, timeIndex) => (
-                        <li
-                          key={timeIndex}
-                          className="flex justify-between items-center bg-gray-100 px-3 py-2 rounded-md"
-                        >
-                          <span>{time}</span>
-                          <button
-                            onClick={() => removeTime(index, time)}
-                            className="text-red-500 hover:text-red-700"
-                          >
-                            Remove
-                          </button>
-                        </li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <p className="text-sm text-gray-500">
-                      No unavailable times added.
-                    </p>
-                  )}
-                </div>
+      {/* Calendar Component */}
+      <div className="mb-6">
+        <Calendar
+          onChange={onDateChange}
+          value={selectedDate}
+          minDate={new Date()} // Prevent selecting past dates
+          view={viewMode} // Set calendar view based on state
+          className="react-calendar w-full rounded-md shadow-md"
+        />
+      </div>
 
-                {/* Add Time */}
-                <div className="mt-4">
-                  <input
-                    type="time"
-                    className="border border-gray-300 rounded-md px-3 py-2 mr-2 outline-none focus:ring-2 focus:ring-blue-500"
-                    id={`time-input-${index}`}
-                  />
-                  <button
-                    onClick={() =>
-                      addTime(
-                        index,
-                        document.getElementById(`time-input-${index}`).value,
-                      )
-                    }
-                    className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
-                  >
-                    Add Time
-                  </button>
-                </div>
-              </>
-            )}
+      {/* Availability Input Form */}
+      <div className="mb-6 bg-white shadow-md rounded px-8 pt-6 pb-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <input
+            type="date"
+            value={newSlot.date}
+            onChange={(e) =>
+              setNewSlot((prev) => ({ ...prev, date: e.target.value }))
+            }
+            className="border rounded p-2"
+            disabled
+          />
+
+          <input
+            type="time"
+            value={newSlot.startTime}
+            onChange={(e) =>
+              setNewSlot((prev) => ({ ...prev, startTime: e.target.value }))
+            }
+            className="border rounded p-2"
+            placeholder="Start Time"
+          />
+
+          <input
+            type="time"
+            value={newSlot.endTime}
+            onChange={(e) =>
+              setNewSlot((prev) => ({ ...prev, endTime: e.target.value }))
+            }
+            className="border rounded p-2"
+            placeholder="End Time"
+          />
+
+          <input
+            type="text"
+            value={newSlot.description}
+            onChange={(e) =>
+              setNewSlot((prev) => ({ ...prev, description: e.target.value }))
+            }
+            className="border rounded p-2"
+            placeholder="Description (optional)"
+          />
+        </div>
+        <button
+          onClick={handleAddSlot}
+          className="mt-4 w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
+        >
+          Add Availability Slot
+        </button>
+      </div>
+
+      {/* Availability Display */}
+      <div className="grid md:grid-cols-3 gap-4">
+        {Object.keys(availability).map((date) => (
+          <div key={date} className="bg-white shadow-md rounded p-4">
+            <h2 className="text-xl font-semibold mb-4">
+              {new Date(date).toLocaleDateString()}
+            </h2>
+            {renderAvailabilitySlots(date)}
+
           </div>
         ))}
       </div>
