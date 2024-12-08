@@ -1,13 +1,31 @@
 import React, { useState } from "react";
 
 const EventPage = () => {
+  const getDayOfWeek = (date) => {
+    const daysOfWeek = [
+      'Sunday',
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday',
+    ];
+    const dateObj = new Date(date); // Convert the date string to Date object
+    const day = dateObj.getDay();   // Get the day of the week (0-6)
+    return daysOfWeek[day];         // Map day number to day name
+  };
+
   const [events, setEvents] = useState([]); // Stores the list of events
   const [newEvent, setNewEvent] = useState({
     name: "",
     date: "",
-    time: "",
+    startTime: "",
+    endTime: "",
     location: "",
+    day:"",
   }); // Data for creating a new event
+ console.log(newEvent);
   const [meetingDetails, setMeetingDetails] = useState({
     eventId: "",
     name: "",
@@ -25,7 +43,7 @@ const EventPage = () => {
     }
     const eventId = events.length + 1; // Simple ID generation
     setEvents([...events, { ...newEvent, id: eventId }]);
-    setNewEvent({ name: "", date: "", time: "", location: "" });
+    setNewEvent({ name: "",  startTime: "", endTime: "", location: "",date: "",day:"" });
     alert("Event created successfully!");
   };
 
@@ -35,9 +53,7 @@ const EventPage = () => {
       alert("Please select an event and provide meeting details.");
       return;
     }
-    alert(
-      `Meeting scheduled successfully for event ID: ${meetingDetails.eventId}`,
-    );
+    alert(`Meeting scheduled successfully for event ID: ${meetingDetails.eventId}`);
     setMeetingDetails({
       eventId: "",
       name: "",
@@ -76,30 +92,31 @@ const EventPage = () => {
                 className="w-full border border-gray-300 rounded-md p-2"
               />
             </div>
+          
             <div>
               <label className="block text-gray-700 font-medium mb-2">
-                Date
+               Start Time
               </label>
               <input
-                type="date"
-                name="date"
-                value={newEvent.date}
+                type="time"
+                name="startTime"
+                value={newEvent.startTime}
                 onChange={(e) =>
-                  setNewEvent({ ...newEvent, date: e.target.value })
+                  setNewEvent({ ...newEvent, startTime: e.target.value })
                 }
                 className="w-full border border-gray-300 rounded-md p-2"
               />
             </div>
             <div>
               <label className="block text-gray-700 font-medium mb-2">
-                Time
+               End Time
               </label>
               <input
                 type="time"
-                name="time"
-                value={newEvent.time}
+                name="endTime"
+                value={newEvent.endTime}
                 onChange={(e) =>
-                  setNewEvent({ ...newEvent, time: e.target.value })
+                  setNewEvent({ ...newEvent, endTime: e.target.value })
                 }
                 className="w-full border border-gray-300 rounded-md p-2"
               />
@@ -119,6 +136,30 @@ const EventPage = () => {
                 className="w-full border border-gray-300 rounded-md p-2"
               />
             </div>
+            <div>
+  <label className="block text-gray-700 font-medium mb-2">
+    Date
+  </label>
+  <input
+    type="date"
+    name="date"
+    value={newEvent.date}
+    onChange={(e) => {
+      const selectedDate = e.target.value;
+      const day = getDayOfWeek(selectedDate); // Get the day from the selected date
+
+      console.log(`Selected Date: ${selectedDate}, Day: ${day}`); 
+
+      setNewEvent({
+        ...newEvent,
+        date: selectedDate,
+        day: day, // Store the day in the state
+      });
+    }}
+    className="w-full border border-gray-300 rounded-md p-2"
+  />
+</div>
+
             <button
               type="button"
               onClick={handleEventCreation}
@@ -248,7 +289,7 @@ const EventPage = () => {
                       inPersonAddress: e.target.value,
                     })
                   }
-                  placeholder="Enter in-person address"
+                  placeholder="Enter address for in-person meeting"
                   className="w-full border border-gray-300 rounded-md p-2"
                 />
               </div>
@@ -256,7 +297,7 @@ const EventPage = () => {
             <button
               type="button"
               onClick={handleMeetingScheduling}
-              className="bg-green-500 text-white py-2 px-4 rounded-md w-full"
+              className="bg-blue-500 text-white py-2 px-4 rounded-md w-full"
             >
               Schedule Meeting
             </button>
