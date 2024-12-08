@@ -17,16 +17,16 @@ const Home = ({ openModal }) => {
         <div className="flex flex-col justify-center items-center">
           <button
             className="p-2 bg-blue-300 shadow-lg mb-4 w-1/3"
-            onClick={() => openModal('host')}
+            onClick={() => openModal('guest')}
           >
-            Sign In As Host
+            Sign Up As Host
           </button>
           <p className="mb-4">Or</p>
           <button
             className="p-2 bg-blue-300 shadow-lg w-1/3"
-            onClick={() => openModal('')}
+            onClick={() => openModal('host')}
           >
-            Sign In As Guest
+            Sign Up As Guest
           </button>
         </div>
       </div>
