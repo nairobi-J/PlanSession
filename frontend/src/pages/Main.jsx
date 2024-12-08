@@ -21,10 +21,10 @@ const Main = () => {
 
   const navigate = useNavigate();
   return (
-    <div className="flex h-screen ">
+    <div className="flex ">
       {/* Sidebar / Dashboard */}
       <div
-        className={` p-4 transition-all bg-white text-white ${isDashboardCollapsed ? 'w-10' : 'w-64'}`}
+        className={` p-4 transition-all bg-black text-white ${isDashboardCollapsed ? 'w-10' : 'w-64'}`}
       >
         {/* <button
           className="bg-gradient-to-r from-blue-200 via-purple-200 to-pink-200 text-black py-2 px-4 rounded-md mb-6 w-full"
@@ -33,23 +33,23 @@ const Main = () => {
         >
           Create
         </button> */}
-        <div className="flex flex-col gap-4">
-          <Link to="event" className="text-black hover:text-blue-900">
+        <div className="flex flex-col gap-4 ">
+          <Link to="event" className="text-white hover:text-blue-900 ">
             Event
           </Link>
-          <Link to="availability" className="text-black hover:text-blue-900">
+          <Link to="availability" className="text-white hover:text-blue-900">
             Availability
           </Link>
-          <Link to="meetings" className="text-black hover:text-blue-900">
+          <Link to="meetings" className="text-white hover:text-blue-900">
             Meetings
           </Link>
-          <Link to="analytics" className="text-black hover:text-blue-900">
+          <Link to="analytics" className="text-white hover:text-blue-900">
             Analytics
           </Link>
-          <Link to="notifications" className="text-black hover:text-blue-900">
+          <Link to="notifications" className="text-white hover:text-blue-900">
             Notifications
           </Link>
-          <Link to="create" className="text-black hover:text-blue-900">
+          <Link to="create" className="text-white hover:text-blue-900">
             Create 
           </Link>
         </div>
@@ -62,7 +62,7 @@ const Main = () => {
       </div>
 
       {/* Main Content Section */}
-      <div className="flex-1 p-6 overflow-auto  w-screen">
+      <div className="flex-1 p-6  w-1/2">
         {/* Search Bar - Positioned at the top of the content */}
         <div className={`flex justify-center items-center mb-4 transition-all duration-300 ${isSearchCollapsed ? 'h-10' : 'h-16'}`}>
   <div className="flex items-center border border-gray-300 rounded-lg p-2 w-1/2 bg-white">
@@ -80,7 +80,7 @@ const Main = () => {
 
 
         {/* Dynamic Content Rendering - Nested Route will show here */}
-        <div className="mt-4  ">
+        <div className="mt-4 ">
           {/* The Outlet renders the nested route */}
           <Outlet context={{ searchTerm }} /> {/* Passing search term to children via Outlet */}
         </div>
