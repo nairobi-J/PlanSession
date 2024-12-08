@@ -11,8 +11,8 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
+  background: linear-gradient(to right, #48BB78, #9AE6B4);
+  
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -43,9 +43,14 @@ h1 {
 
 
 button{
-  border-radius: 6%;
+  
+  background-color: black;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 6px;
   &:hover{
-    background-color: rgb(207, 210, 212);
+    background-color: rgb(255, 255, 255);
+    color: black;
   }
 }
 
