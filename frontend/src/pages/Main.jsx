@@ -21,69 +21,63 @@ const Main = () => {
 
   const navigate = useNavigate();
   return (
-    <div className="flex ">
+    
+    <div className="flex flex-col w-screen">
       {/* Sidebar / Dashboard */}
       <div
-        className={` p-4 transition-all bg-black text-white ${isDashboardCollapsed ? 'w-10' : 'w-64'}`}
-      >
-        {/* <button
-          className="bg-gradient-to-r from-blue-200 via-purple-200 to-pink-200 text-black py-2 px-4 rounded-md mb-6 w-full"
+        className={` transition-all w-full  text-black bg-white ${isDashboardCollapsed ? 'w-10' : 'w-64'}`} 
+      > 
+       <div className="p-4 shadow-lg">
 
-          onClick={() => } // Placeholder for Create button functionality
-        >
-          Create
-        </button> */}
-        <div className="flex flex-col gap-4 ">
-          <Link to="event" className="text-white hover:text-blue-900 ">
-            Event
-          </Link>
-          <Link to="availability" className="text-white hover:text-blue-900">
-            Availability
-          </Link>
-          <Link to="meetings" className="text-white hover:text-blue-900">
-            Meetings
-          </Link>
-          <Link to="analytics" className="text-white hover:text-blue-900">
-            Analytics
-          </Link>
-          <Link to="notifications" className="text-white hover:text-blue-900">
-            Notifications
-          </Link>
-          <Link to="create" className="text-white hover:text-blue-900">
-            Create 
-          </Link>
-        </div>
-        <button
-          onClick={toggleDashboardSize}
-          className="mt-6 py-2 px-4 bg-gradient-to-r  from-green-400 via-green-300  to-green-100 rounded-md"
-        >
-          {isDashboardCollapsed ? '>' : '<'}
-        </button>
-      </div>
 
-      {/* Main Content Section */}
-      <div className="flex-1 p-6  w-1/2">
-        {/* Search Bar - Positioned at the top of the content */}
-        <div className={`flex justify-center items-center mb-4 transition-all duration-300 ${isSearchCollapsed ? 'h-10' : 'h-16'}`}>
-  <div className="flex items-center border border-gray-300 rounded-lg p-2 w-1/2 bg-white">
+  {/* Wrap links in a div or ul with gap */}
+  <div className="flex flex-row gap-5 mt-4 ">
+    <Link to="event" className="">Event</Link>
+    <Link to="availability" className="hover:text-blue-900">Availability</Link>
+    <Link to="meetings" className="hover:text-blue-900">Meetings</Link>
+    <Link to="analytics" className="hover:text-blue-900">Analytics</Link>
+    <Link to="notifications" className="hover:text-blue-900">Notifications</Link>
+    <Link to="create" className="hover:text-blue-900">Create</Link>
+    <Link to="profile" className="hover:text-blue-900">Profile</Link>
+  </div>
+
+  {/* Search Bar */}
+  <div className="flex items-center mt-4">
     <Search className="text-gray-500 mr-3" size={24} />
     <input
       type="text"
       placeholder="Search..."
-      className="outline-none w-full text-sm text-gray-700 placeholder-gray-400 bg-transparent"
+      className="outline-none text-sm text-gray-700 placeholder-gray-400 bg-transparent"
       value={searchTerm}
       onChange={handleSearchChange}
     />
   </div>
-  {/* Toggle Button for Search Bar */}
 </div>
 
+        <hr/>
+        {/* <button
+          onClick={toggleDashboardSize}
+          className="mt-6 py-2 px-4 bg-gradient-to-r from-green-200 to-green-100 rounded-md text-black"
+        >
+          {isDashboardCollapsed ? '>' : '<'}
+        </button> */}
+       
+      </div>
+
+      {/* Main Content Section */} 
+      <div className=" ">
+        {/* Search Bar - Positioned at the top of the content */}
+       
 
         {/* Dynamic Content Rendering - Nested Route will show here */}
-        <div className="mt-4 ">
+        
+        <div className="">
+      
           {/* The Outlet renders the nested route */}
-          <Outlet context={{ searchTerm }} /> {/* Passing search term to children via Outlet */}
+          <Outlet  /> {/* Passing search term to children via Outlet */}
         </div>
+        
+        
       </div>
     </div>
   );

@@ -26,18 +26,18 @@ const NotificationsPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col justify-center items-center p-6">
-      <h2 className="text-2xl font-semibold text-center text-gray-800 mb-6">Notifications</h2>
+    <div className=" bg-gray-100">
+      <h2 className="text-2xl font-semibold  text-gray-800 mb-6">Notifications</h2>
       
       {/* Add Notification Button */}
       <button
         onClick={addNotification}
-        className="mb-4 px-4 py-2 bg-green-500 text-white rounded-lg shadow-md hover:bg-green-600"
+        className="mb-4  py-2 bg-green-500 text-white rounded-lg shadow-md hover:bg-green-600"
       >
         Add Notification
       </button>
 
-      <div className="max-w-2xl w-full space-y-4">
+      <div className="max-w-2xl  space-y-4">
         {notifications.length === 0 ? (
           <p className="text-gray-500 text-center">No notifications yet.</p>
         ) : (

@@ -9,6 +9,7 @@ import NotificationsPage from './pages/NotificationsPage'; // Your Notifications
 import Home from './pages/Home';
 import Modal from './components/Modal'; 
 import Create from './pages/Create';
+import Profile from './pages/Profile';
 
 const App = () => {
   
@@ -36,6 +37,7 @@ const App = () => {
           <Route path="analytics" element={<AnalyticsPage />} />
           <Route path="notifications" element={<NotificationsPage />} />
           <Route path="create" element={<Create/>} />
+          <Route path='profile' element= {<Profile/>} />
         </Route>
         
         {/* Home route */}
