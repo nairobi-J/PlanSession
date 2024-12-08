@@ -103,6 +103,39 @@ const Modal = ({ onClose, modalType }) => {
     navigate('/main');
   };
 
+  const handleLogin = async(e) => {
+    e.preventDefault();
+
+    // Validation logic for Login and Sign Up
+    if (!formData.name || !formData.password) {
+      alert('Username and password are required.');
+      return;
+    }
+
+    
+    console.log(formData.name + " " + formData.password)
+
+    try {
+      const response = await axios.post('http://localhost:5000/api/login', formData);
+     
+
+      if (response.data.success) {
+        setMessage('Successfully signed up!');
+      } else {
+        console.log(error)
+        setMessage(response.data?.msg || 'Error signing up');
+      }
+  
+  } catch (error) {
+      console.log(error)
+      setMessage(error.response?.data?.msg || 'Error signing in');
+  }
+
+    // Successful login or sign-up
+    onClose(); // Close modal after success
+    navigate('/main');
+  };
+
   return (
     <div className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm flex flex-col gap-2 items-center justify-center">
       <form
@@ -191,7 +224,7 @@ const Modal = ({ onClose, modalType }) => {
     )}
     {modalType === 'login' && 
       ( <button
-       type="submit"
+       type="submit" onClick={handleLogin}
        className="bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-lg w-full"
      >
        Log In
@@ -199,7 +232,7 @@ const Modal = ({ onClose, modalType }) => {
     }
     {modalType === 'guest' && 
       ( <button
-       type="submit"
+       type="submit" onClick={handleSubmit}
        className="bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-lg w-full"
      >
        Guest Sign In
@@ -207,7 +240,7 @@ const Modal = ({ onClose, modalType }) => {
     }
     {modalType === 'host' && 
       ( <button
-       type="submit"
+       type="submit" onClick={handleSubmit}
        className="bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-lg w-full"
      >
        Host Sign In
