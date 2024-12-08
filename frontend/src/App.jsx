@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Main from './pages/Main'; // Your Main Component
 import EventPage from './pages/EventPage'; // Your EventPage component
@@ -7,9 +7,22 @@ import MeetingsPage from './pages/MeetingsPage'; // Your MeetingsPage component
 import AnalyticsPage from './pages/AnalyticsPage'; // Your AnalyticsPage component
 import NotificationsPage from './pages/NotificationsPage'; // Your NotificationsPage component
 import Home from './pages/Home';
-
+import Modal from './components/Modal'; 
 
 const App = () => {
+  
+  const [isModalVisible, setIsModalVisible] = useState(false); // Modal visibility state
+  const [modalType, setModalType] = useState(''); // For controlling modal type (guest or host)
+
+  // Function to toggle modal visibility
+  const openModal = (type) => {
+    setModalType(type); // Set modal type (host or guest)
+    setIsModalVisible(true); // Show modal
+  };
+
+  const closeModal = () => {
+    setIsModalVisible(false); // Close modal
+  };
   return (
     <Router>
       <Routes>
@@ -24,8 +37,15 @@ const App = () => {
         </Route>
         
         {/* Home route */}
-        <Route path="/" element={<Home/>} />
+        <Route path="/" element={<Home openModal={openModal} />} />
+        
       </Routes>
+      {isModalVisible && (
+          <Modal
+            onClose={closeModal} // Close modal logic
+            modalType={modalType} // Pass modal type (login, guest, host)
+          />
+        )}
     </Router>
   );
 };
