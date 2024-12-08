@@ -148,6 +148,7 @@ const AvailabilityPage = () => {
         </button>
       </div>
 
+
       {/* Calendar Component */}
       <div className="mb-6">
         <Calendar
@@ -218,6 +219,7 @@ const AvailabilityPage = () => {
               {new Date(date).toLocaleDateString()}
             </h2>
             {renderAvailabilitySlots(date)}
+
           </div>
         ))}
       </div>

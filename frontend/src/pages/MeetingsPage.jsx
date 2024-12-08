@@ -50,7 +50,7 @@ const MeetingsPage = () => {
   });
 
   return (
-    <div className="min-h-screen   p-6">
+    <div className="min-h-screen p-6 w-full">
       {/* Header Section */}
       <div className="mb-6">
         <h1 className="text-3xl font-bold text-gray-800 text-center">

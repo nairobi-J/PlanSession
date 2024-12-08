@@ -41,13 +41,13 @@ const Analytics = () => {
   }, []);
 
   return (
-    <div className="min-h-screen p-6">
+    <div className=" p-24 flex flex-col items-center justify-center ml-20 w-100%  bg-green-100 shadow-l rounded-lg">
       <h1 className="text-3xl font-bold text-gray-800 text-center mb-6">
-        Event Analytics
+        Stats & Analytics
       </h1>
 
       {loading ? (
-        <div className="flex justify-center items-center h-64">
+        <div className="flex justify-center items-center h-64 g">
           <p className="text-lg text-gray-600">Loading analytics...</p>
         </div>
       ) : (
