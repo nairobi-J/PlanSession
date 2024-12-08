@@ -41,7 +41,7 @@ const Analytics = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-blue-200 via-purple-200 to-pink-200  p-6">
+    <div className="min-h-screen p-6">
       <h1 className="text-3xl font-bold text-gray-800 text-center mb-6">
         Event Analytics
       </h1>

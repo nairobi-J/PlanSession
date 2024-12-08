@@ -57,7 +57,7 @@ const Home = ({ openModal }) => {
     </div>
 
   
-    <div className=" px-6 py-10 bg-gradient-to-r from-blue-200 via-purple-200 to-pink-200 shadow-xl rounded-lg">
+    <div className=" px-6 py-10 bg-gradient-to-r  from-green-400 via-green-300  to-green-100 shadow-xl rounded-lg">
       <h2 className="text-3xl font-bold text-center mb-6">About Us</h2>
       <p className="text-lg leading-8 text-center mb-6">
         We are a team of dedicated software engineers from <strong>Shahjalal University of Science and Technology (SUST)</strong>.

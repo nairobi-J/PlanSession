@@ -55,14 +55,14 @@ const Main = () => {
         </div>
         <button
           onClick={toggleDashboardSize}
-          className="mt-6 py-2 px-4 bg-gradient-to-r from-blue-200 via-purple-200 to-pink-200  text-black rounded-md"
+          className="mt-6 py-2 px-4 bg-gradient-to-r  from-green-400 via-green-300  to-green-100 rounded-md"
         >
           {isDashboardCollapsed ? '>' : '<'}
         </button>
       </div>
 
       {/* Main Content Section */}
-      <div className="flex-1 p-6 overflow-auto bg-gradient-to-r from-blue-200 via-purple-200 to-pink-200 w-screen">
+      <div className="flex-1 p-6 overflow-auto  w-screen">
         {/* Search Bar - Positioned at the top of the content */}
         <div className={`flex justify-center items-center mb-4 transition-all duration-300 ${isSearchCollapsed ? 'h-10' : 'h-16'}`}>
   <div className="flex items-center border border-gray-300 rounded-lg p-2 w-1/2 bg-white">
@@ -80,7 +80,7 @@ const Main = () => {
 
 
         {/* Dynamic Content Rendering - Nested Route will show here */}
-        <div className="mt-4 bg-gradient-to-r from-blue-200 via-purple-200 to-pink-200 ">
+        <div className="mt-4  ">
           {/* The Outlet renders the nested route */}
           <Outlet context={{ searchTerm }} /> {/* Passing search term to children via Outlet */}
         </div>

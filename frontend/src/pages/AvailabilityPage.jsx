@@ -40,7 +40,7 @@ const AvailabilityPage = () => {
   };
 
   return (
-    <div className="p-6 bg-gradient-to-r from-blue-200 via-purple-200 to-pink-200  min-h-screen">
+    <div className="p-6   min-h-screen">
       {/* Header */}
       <div className="mb-8 text-center">
         <h1 className="text-4xl font-bold text-gray-800">
