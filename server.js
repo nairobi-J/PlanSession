@@ -9,6 +9,8 @@ const mysql = require("mysql2/promise");
 const { check, validationResult, param } = require("express-validator");
 require("dotenv").config();
 
+const {signup, login} = require('./controller/user')
+
 const app = express();
 const PORT = 5000;
 const SECRET_KEY = process.env.SECRET_KEY;
@@ -25,91 +27,118 @@ const dbConfig = {
 };
 
 
-app.post("/api/signup", async (req, res) => {
-    const { name, email, password, timezone} = req.body;
+app.post("/api/signup", signup);
   
-    console.log(req.body);
+
+  app.post("/api/login", login);
+
+  app.post('/api/events', async (req, res) => {
+    const { userId, startTime, endTime, type, status } = req.body;
+  
+    if (!userId || !startTime || !endTime || !type || !status) {
+      return res.status(400).json({ msg: "All fields are required." });
+    }
   
     try {
       const connection = await mysql.createConnection(dbConfig);
-      if (connection) {
-        console.log("connected");
-      } else {
-        console.log("not connected");
-      }
-      const [existingUser] = await connection.execute(
-        "SELECT id FROM users WHERE name = ?",
-        [name]
+  
+      const [result] = await connection.execute(
+        `INSERT INTO events (userId, startTime, endTime, type, status) 
+         VALUES (?, ?, ?, ?, ?)`,
+        [userId, startTime, endTime, type, status]
       );
-      if (existingUser.length > 0) {
-        await connection.end();
-        return res.status(400).json({ msg: "User already exists" });
-      }
-    //   const salt = await bcrypt.genSalt(10);
-    //   const hashedPassword = await bcrypt.hash(password, salt);
-
-    const hashedPassword = password;
-      await connection.execute(
-        "INSERT INTO users (name, email, password, timezone) VALUES (?, ?, ?, ?)",
-        [name, email, hashedPassword, timezone]
-      );
+  
       await connection.end();
-      res.status(201).json({ msg: "User created successfully" });
+      res.status(201).json({ id: result.insertId, msg: "Event created successfully." });
     } catch (error) {
-      res.status(500).json({ error: "Server error" });
+      console.error('Error creating event:', error);
+      res.status(500).json({ msg: "Server error." });
+    }
+  });
+
+  app.get('/api/events', async (req, res) => {
+    try {
+      const connection = await mysql.createConnection(dbConfig);
+  
+      const [events] = await connection.execute('SELECT * FROM events');
+  
+      await connection.end();
+      res.status(200).json(events);
+    } catch (error) {
+      console.error('Error fetching events:', error);
+      res.status(500).json({ msg: "Server error." });
     }
   });
   
-
-  app.post("/api/login", async (req, res) => {
-  //  const { name, password } = req.body;
-    console.log(req.body);
-    
-
-    const name = req.body.fName
-    const password = req.body.fPass
-    console.log(name)
-    console.log(password)
+  app.get('/api/events/:userId', async (req, res) => {
+    const { userId } = req.params;
+  
     try {
       const connection = await mysql.createConnection(dbConfig);
   
-      const [rows] = await connection.execute(
-        "SELECT id, name, password FROM users where name = ?",
-        [name]
+      const [events] = await connection.execute(
+        'SELECT * FROM events WHERE userId = ?',
+        [userId]
       );
   
-      if (rows.length === 0) {
-        await connection.end();
-        return res.status(400).json({ msg: "Invalid credentials" });
-      }
-  
-      const user = rows[0];
+      await connection.end();
+      res.status(200).json(events);
+    } catch (error) {
+      console.error('Error fetching user events:', error);
+      res.status(500).json({ msg: "Server error." });
+    }
+  });
 
-      console.log(password + " " + user.password)
+  app.put('/api/events/:id', async (req, res) => {
+    const { id } = req.params;
+    const { startTime, endTime, type, status } = req.body;
   
-      const isMatch = (password == user.password)
+    try {
+      const connection = await mysql.createConnection(dbConfig);
   
-      if (!isMatch) {
-        await connection.end();
-        return res.status(400).json({ msg: "Wrong Password" });
-      }
-  
-      const payload = {
-        user: {
-          id: user.id,
-        },
-      };
-  
-      const token = jwt.sign(payload, process.env.SECRET_KEY, {
-        expiresIn: "1h",
-      });
+      const [result] = await connection.execute(
+        `UPDATE events SET startTime = ?, endTime = ?, type = ?, status = ? 
+         WHERE id = ?`,
+        [startTime, endTime, type, status, id]
+      );
   
       await connection.end();
   
-      res.json({ token });
-    } catch (error) {}
+      if (result.affectedRows === 0) {
+        return res.status(404).json({ msg: "Event not found." });
+      }
+  
+      res.status(200).json({ msg: "Event updated successfully." });
+    } catch (error) {
+      console.error('Error updating event:', error);
+      res.status(500).json({ msg: "Server error." });
+    }
   });
-
+  
+  app.delete('/api/events/:id', async (req, res) => {
+    const { id } = req.params;
+  
+    try {
+      const connection = await mysql.createConnection(dbConfig);
+  
+      const [result] = await connection.execute(
+        'DELETE FROM events WHERE id = ?',
+        [id]
+      );
+  
+      await connection.end();
+  
+      if (result.affectedRows === 0) {
+        return res.status(404).json({ msg: "Event not found." });
+      }
+  
+      res.status(200).json({ msg: "Event deleted successfully." });
+    } catch (error) {
+      console.error('Error deleting event:', error);
+      res.status(500).json({ msg: "Server error." });
+    }
+  });
+  
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
   });
