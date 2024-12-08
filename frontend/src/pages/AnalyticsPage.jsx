@@ -41,17 +41,17 @@ const Analytics = () => {
   }, []);
 
   return (
-    <div className=" p-24 flex flex-col items-center justify-center ml-20 w-100%  bg-green-100 shadow-l rounded-lg">
-      <h1 className="text-3xl font-bold text-gray-800 text-center mb-6">
+    <div className="">
+      <h1 className="">
         Stats & Analytics
       </h1>
 
       {loading ? (
-        <div className="flex justify-center items-center h-64 g">
-          <p className="text-lg text-gray-600">Loading analytics...</p>
+        <div className="">
+          <p className="">Loading analytics...</p>
         </div>
       ) : (
-        <div className="max-w-4xl mx-auto bg-white shadow-md rounded-lg p-6 space-y-6">
+        <div className="">
           {/* Overview Section */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="bg-blue-100 p-4 rounded-lg text-center">

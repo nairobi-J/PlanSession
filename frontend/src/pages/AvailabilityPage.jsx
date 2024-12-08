@@ -89,7 +89,7 @@ const AvailabilityPage = () => {
     return availability[date].map((slot) => (
       <div
         key={slot.id}
-        className="flex justify-between items-center bg-gray-100 p-2 rounded mb-2"
+        className="flex justify-between items-center bg-gray-100 p-4 rounded mb-2"
       >
         <div>
           <span className="font-bold">
@@ -102,13 +102,13 @@ const AvailabilityPage = () => {
         <div>
           <button
             onClick={() => handleEditSlot(date, slot.id)}
-            className="text-blue-500 hover:text-blue-700 mr-2"
+            className="text-black bg-white hover:bg-blue-200 mr-2"
           >
             Edit
           </button>
           <button
             onClick={() => handleRemoveSlot(date, slot.id)}
-            className="text-red-500 hover:text-red-700"
+            className="text-white bg-red-500 hover:text-red-700"
           >
             Remove
           </button>
@@ -148,15 +148,14 @@ const AvailabilityPage = () => {
         </button>
       </div>
 
-
-      {/* Calendar Component */}
-      <div className="mb-6">
+     <div className="flex gap-3">
+     <div className="mb-6">
         <Calendar
           onChange={onDateChange}
           value={selectedDate}
           minDate={new Date()} // Prevent selecting past dates
           view={viewMode} // Set calendar view based on state
-          className="react-calendar w-full rounded-md shadow-md"
+          className="react-calendar w-full rounded-md shadow-md text-black"
         />
       </div>
 
@@ -210,6 +209,10 @@ const AvailabilityPage = () => {
           Add Availability Slot
         </button>
       </div>
+
+     </div>
+      {/* Calendar Component */}
+     
 
       {/* Availability Display */}
       <div className="grid md:grid-cols-3 gap-4">

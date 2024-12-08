@@ -59,8 +59,8 @@ const Profile = () => {
   return (
     <div
       className={`${
-        user.theme === 'light' ? 'bg-white text-black' : 'bg-black text-white'
-      } p-8 min-h-screen`}
+        user.theme === 'light' ? 'bg-gray-100 text-black' : 'bg-black text-white'
+      } p-8 min-h-screen w-screen`}
     >
       <div className="flex justify-center items-center flex-col">
         {/* Profile Picture */}

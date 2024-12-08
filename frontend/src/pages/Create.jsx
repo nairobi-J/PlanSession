@@ -65,7 +65,7 @@ const EventPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
+    <div className="min-h-screen bg-gray-100 p-6 w-screen">
       <h1 className="text-3xl font-bold text-gray-800 text-center mb-6">
         Event Management
       </h1>
