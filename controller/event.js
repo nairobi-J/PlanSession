@@ -61,8 +61,9 @@ const postEvent = async (req, res) => {
   }
 
   const getUserEvents = async (req, res) => {
-    const { userId } = req.params;
-  
+    const userId = req.user.id;
+
+    console.log(userId)
     try {
       const connection = await mysql.createConnection(dbConfig);
   

@@ -49,7 +49,7 @@ app.post("/api/login", login);
 
 app.post('/api/events',authMiddleware, postEvent);
 app.get('/api/events', getAllEvents);
-app.get('/api/events/:userId', getUserEvents);
+app.get('/api/events/user',authMiddleware, getUserEvents);
 app.put('/api/events/:id', updateEvents);
 app.delete('/api/events/:id', deleteEvents);
 
