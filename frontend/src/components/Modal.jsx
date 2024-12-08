@@ -121,16 +121,17 @@ const Modal = ({ onClose, modalType }) => {
     try {
       const response = await axios.post('http://localhost:5000/api/login', {fName, fPass});
      
-      console.log(response.data)
+      console.log(response.data.token)
+      localStorage.setItem('token', response.data.token)
 
       if (response.data.success) {
         setMessage('Successfully logged in!');
       } else {
-        console.log(error)
+      
         setMessage(response.data?.msg || 'Error loggin in');
       }
 
-      localStorage.setItem('token', response.data.token)
+     
   
   } catch (error) {
       console.log(error)

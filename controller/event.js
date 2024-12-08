@@ -7,21 +7,35 @@ const cors = require("cors");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const mysql = require("mysql2/promise");
+const { parse, differenceInMinutes } = require('date-fns');
 
 const postEvent = async (req, res) => {
-    const { userId, startTime, endTime, type, status } = req.body;
+    const userId = req.user.id;
+
+    console.log(userId)
+
+    console.log(req.body)
+
+    const { name, date, startTime, endTime, location, day} = req.body;
   
-    if (!userId || !startTime || !endTime || !type || !status) {
+    if (!userId || !startTime || !endTime  ) {
       return res.status(400).json({ msg: "All fields are required." });
     }
+
+    const start = parse(startTime, 'HH:mm:ss', new Date());
+    const end = parse(endTime, 'HH:mm:ss', new Date());
+
+    // Get the difference in minutes
+    const duration = differenceInMinutes(end, start);
+
   
     try {
       const connection = await mysql.createConnection(dbConfig);
   
       const [result] = await connection.execute(
-        `INSERT INTO events (userId, startTime, endTime, type, status) 
-         VALUES (?, ?, ?, ?, ?)`,
-        [userId, startTime, endTime, type, status]
+        `INSERT INTO events ( name, date, startTime, endTime, location, day, userId,  duration) 
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+        [ name, date, startTime, endTime,location, day, userId, duration]
       );
   
       await connection.end();
@@ -47,8 +61,9 @@ const postEvent = async (req, res) => {
   }
 
   const getUserEvents = async (req, res) => {
-    const { userId } = req.params;
-  
+    const userId = req.user.id;
+
+    console.log(userId)
     try {
       const connection = await mysql.createConnection(dbConfig);
   

@@ -1,35 +1,45 @@
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 
 const MeetingsPage = () => {
-  const [meetings] = useState([
-    {
-      id: 1,
-      title: "Project Kickoff",
-      date: "2024-01-15",
-      time: "10:00 AM",
-      status: "Scheduled",
-    },
-    {
-      id: 2,
-      title: "Client Presentation",
-      date: "2024-02-20",
-      time: "02:00 PM",
-      status: "Completed",
-    },
-    {
-      id: 3,
-      title: "Team Retrospective",
-      date: "2024-03-05",
-      time: "04:00 PM",
-      status: "Cancelled",
-    },
-  ]);
-
+  const [meetings, setMeetings] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [yearFilter, setYearFilter] = useState("");
   const [monthFilter, setMonthFilter] = useState("");
 
-  // Get unique years and months from meetings
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = localStorage.getItem('token')
+      
+        const { data } = await axios.get(`http://localhost:5000/api/events/user`, {
+          headers: {
+           'x-auth-token': token
+          }
+        } );
+
+        // Map data to match frontend structure
+        const formattedData = data.map((meeting) => ({
+          id: meeting.id,
+          title: meeting.name, // Map 'name' to 'title'
+          date: meeting.date.split("T")[0], // Extract date part
+          time: `${meeting.startTime} - ${meeting.endTime}`, // Combine times
+          location: meeting.location,
+          day: meeting.day,
+          duration: meeting.duration,
+          status: meeting.status || "Scheduled", // Default status
+        }));
+
+        setMeetings(formattedData);
+      } catch (error) {
+        console.error("Error fetching events:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  // Unique years and months for filters
   const uniqueYears = Array.from(
     new Set(meetings.map((m) => m.date.split("-")[0]))
   );
@@ -37,7 +47,7 @@ const MeetingsPage = () => {
     new Set(meetings.map((m) => m.date.split("-")[1]))
   );
 
-  // Filtered meetings based on search, year, and month
+  // Filter meetings
   const filteredMeetings = meetings.filter((meeting) => {
     const matchesSearch = meeting.title
       .toLowerCase()
@@ -88,52 +98,58 @@ const MeetingsPage = () => {
                   <option key={month} value={month}>
                     {new Date(2024, parseInt(month, 10) - 1).toLocaleString("default", {
                       month: "long",
-                    })}
-                  </option>
-                ))}
-              </select>
-            </div>
+
+                    }
+                  )}
+                </option>
+              ))}
+            </select>
+
           </div>
         </div>
      
         {/* Header Section */}
       
 
-        {/* Meetings Display */}
-        <div className="space-y-6">
-          {filteredMeetings.length > 0 ? (
-            filteredMeetings.map((meeting) => (
-              <div
-                key={meeting.id}
-                className="flex justify-between items-center bg-white p-4 shadow-md rounded-lg border"
-              >
-                <div>
-                  <h4 className="text-lg font-medium text-gray-800">{meeting.title}</h4>
-                  <p className="text-sm text-gray-600">
-                    {meeting.date} at {meeting.time}
-                  </p>
-                </div>
-                <span
-                  className={`px-4 py-1 text-sm font-medium rounded-lg ${
-                    meeting.status === "Scheduled"
-                      ? "bg-blue-100 text-blue-600"
-                      : meeting.status === "Completed"
-                      ? "bg-green-100 text-green-600"
-                      : "bg-red-100 text-red-600"
-                  }`}
-                >
-                  {meeting.status}
-                </span>
+
+      {/* Meetings Display */}
+      <div className="space-y-6">
+        {filteredMeetings.length > 0 ? (
+          filteredMeetings.map((meeting) => (
+            <div
+              key={meeting.id}
+              className="flex justify-between items-center bg-white p-4 shadow-md rounded-lg border"
+            >
+              <div>
+                <h4 className="text-lg font-medium text-gray-800">
+                  {meeting.title}
+                </h4>
+                <p className="text-sm text-gray-600">
+                  {meeting.date} ({meeting.day}) at {meeting.time}
+                </p>
+                <p className="text-sm text-gray-500">
+                  Location: {meeting.location}
+                </p>
               </div>
-            ))
-          ) : (
-            <div className="text-center text-gray-700">No meetings found.</div>
-          )}
-        </div>
-    
-    </>
-   
-  
+              <span
+                className={`px-4 py-1 text-sm font-medium rounded-lg ${
+                  meeting.status === "Scheduled"
+                    ? "bg-blue-100 text-blue-600"
+                    : meeting.status === "Completed"
+                    ? "bg-green-100 text-green-600"
+                    : "bg-red-100 text-red-600"
+                }`}
+              >
+                {meeting.status}
+              </span>
+            </div>
+          ))
+        ) : (
+          <div className="text-center text-gray-700">No meetings found.</div>
+        )}
+      </div>
+    </div>
+
   );
 };
 
