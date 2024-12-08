@@ -26,7 +26,7 @@ const dbConfig = {
 
 
 app.post("/api/signup", async (req, res) => {
-    const { name, password } = req.body;
+    const { name, email, password, timezone} = req.body;
   
     console.log(req.body);
   
@@ -48,8 +48,8 @@ app.post("/api/signup", async (req, res) => {
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(password, salt);
       await connection.execute(
-        "INSERT INTO users (name, password) VALUES (?, ?)",
-        [name, hashedPassword]
+        "INSERT INTO users (name, email, password, timezone) VALUES (?, ?, ?, ?)",
+        [name, email, hashedPassword, timezone]
       );
       await connection.end();
       res.status(201).json({ msg: "User created successfully" });
