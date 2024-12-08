@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useState } from "react";
 
 const EventPage = () => {
@@ -36,13 +37,28 @@ const EventPage = () => {
   }); // Data for scheduling a meeting
 
   // Create a new event
-  const handleEventCreation = () => {
-    if (!newEvent.name || !newEvent.date || !newEvent.time) {
+  const handleEventCreation = async() => {
+    if (!newEvent.name || !newEvent.date || !newEvent.startTime) {
       alert("Please fill in all the event details.");
       return;
     }
-    const eventId = events.length + 1; // Simple ID generation
-    setEvents([...events, { ...newEvent, id: eventId }]);
+
+    const events = await axios.get('http://localhost:5000/api/events', newEvent)
+    console.log(events.data)
+    
+    const eventId = events.data.length + 1; // Simple ID generation
+
+    const token = localStorage.getItem('token')
+    console.log(token)
+    
+    const response = await axios.post(`http://localhost:5000/api/events`,newEvent,{
+      headers: {
+       'x-auth-token': token
+      }
+    } );
+
+
+    setEvents([...events.data, { ...newEvent, id: eventId }]);
     setNewEvent({ name: "",  startTime: "", endTime: "", location: "",date: "",day:"" });
     alert("Event created successfully!");
   };

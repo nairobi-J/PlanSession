@@ -1,43 +1,47 @@
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 
 const MeetingsPage = () => {
-  const [meetings] = useState([
-    {
-      id: 1,
-      title: "Project Kickoff",
-      date: "2024-01-15",
-      time: "10:00 AM",
-      status: "Scheduled",
-    },
-    {
-      id: 2,
-      title: "Client Presentation",
-      date: "2024-02-20",
-      time: "02:00 PM",
-      status: "Completed",
-    },
-    {
-      id: 3,
-      title: "Team Retrospective",
-      date: "2024-03-05",
-      time: "04:00 PM",
-      status: "Cancelled",
-    },
-  ]);
-
+  const [meetings, setMeetings] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [yearFilter, setYearFilter] = useState("");
   const [monthFilter, setMonthFilter] = useState("");
 
-  // Get unique years and months from meetings
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const { data } = await axios.get("http://localhost:5000/api/events");
+
+        // Map data to match frontend structure
+        const formattedData = data.map((meeting) => ({
+          id: meeting.id,
+          title: meeting.name, // Map 'name' to 'title'
+          date: meeting.date.split("T")[0], // Extract date part
+          time: `${meeting.startTime} - ${meeting.endTime}`, // Combine times
+          location: meeting.location,
+          day: meeting.day,
+          duration: meeting.duration,
+          status: meeting.status || "Scheduled", // Default status
+        }));
+
+        setMeetings(formattedData);
+      } catch (error) {
+        console.error("Error fetching events:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  // Unique years and months for filters
   const uniqueYears = Array.from(
-    new Set(meetings.map((m) => m.date.split("-")[0])),
+    new Set(meetings.map((m) => m.date.split("-")[0]))
   );
   const uniqueMonths = Array.from(
-    new Set(meetings.map((m) => m.date.split("-")[1])),
+    new Set(meetings.map((m) => m.date.split("-")[1]))
   );
 
-  // Filtered meetings based on search, year, and month
+  // Filter meetings
   const filteredMeetings = meetings.filter((meeting) => {
     const matchesSearch = meeting.title
       .toLowerCase()
@@ -114,7 +118,7 @@ const MeetingsPage = () => {
                     "default",
                     {
                       month: "long",
-                    },
+                    }
                   )}
                 </option>
               ))}
@@ -136,7 +140,10 @@ const MeetingsPage = () => {
                   {meeting.title}
                 </h4>
                 <p className="text-sm text-gray-600">
-                  {meeting.date} at {meeting.time}
+                  {meeting.date} ({meeting.day}) at {meeting.time}
+                </p>
+                <p className="text-sm text-gray-500">
+                  Location: {meeting.location}
                 </p>
               </div>
               <span
@@ -144,8 +151,8 @@ const MeetingsPage = () => {
                   meeting.status === "Scheduled"
                     ? "bg-blue-100 text-blue-600"
                     : meeting.status === "Completed"
-                      ? "bg-green-100 text-green-600"
-                      : "bg-red-100 text-red-600"
+                    ? "bg-green-100 text-green-600"
+                    : "bg-red-100 text-red-600"
                 }`}
               >
                 {meeting.status}
