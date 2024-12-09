@@ -37,7 +37,7 @@ const NotificationsPage = () => {
         Add Notification
       </button>
 
-      <div className="max-w-2xl  space-y-4">
+      <div className="  space-y-4">
         {notifications.length === 0 ? (
           <p className="text-gray-500 text-center">No notifications yet.</p>
         ) : (

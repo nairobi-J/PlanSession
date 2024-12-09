@@ -1,6 +1,5 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-
 const MeetingsPage = () => {
   const [meetings, setMeetings] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -12,7 +11,7 @@ const MeetingsPage = () => {
       try {
         const token = localStorage.getItem('token')
       
-        const { data } = await axios.get(`http://localhost:5000/api/events/user`, {
+        const { data } = await axios.get(`http://192.168.161.37:5000/api/events/user`, {
           headers: {
            'x-auth-token': token
           }
@@ -60,7 +59,7 @@ const MeetingsPage = () => {
   });
 
   return (
-    <>
+    
     
   
     

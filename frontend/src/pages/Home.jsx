@@ -3,7 +3,7 @@ import React from 'react';
 const Home = ({ openModal }) => {
   return (
     <>
-    <div className=" bg-gradient-to-r  from-green-400 to-green-100 h-screen p-10">
+    <div className="flex bg-gradient-to-r  from-green-400 to-green-100 h-screen p-10">
     <img
             src="logo.png" // Replace with actual image if available
             alt="Saikat Singha"
