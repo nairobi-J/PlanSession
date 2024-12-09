@@ -5,6 +5,7 @@ const Requests = () => {
   const [bookings, setBookings] = useState([]);
   const [conflicts, setConflicts] = useState([]);
   const [error, setError] = useState(null);
+  const [resolving, setResolving] = useState(false);
 
   // Fetch bookings and conflicts when the component mounts
   useEffect(() => {
@@ -31,6 +32,31 @@ const Requests = () => {
 
     fetchData();
   }, []);
+
+  const handleResolveConflict = async (conflictId) => {
+    try {
+      setResolving(true); // Indicate resolving in progress
+      const token = localStorage.getItem('token');
+
+      await axios.post(
+        `http://localhost:5000/api/conflict/resolve/${conflictId}`,
+        {},
+        {
+          headers: { 'x-auth-token': token },
+        }
+      );
+
+      // Remove the resolved conflict from the list
+      setConflicts((prevConflicts) =>
+        prevConflicts.filter((conflict) => conflict.conflictId !== conflictId)
+      );
+      setResolving(false);
+    } catch (err) {
+      console.error('Error resolving conflict:', err);
+      setError('Failed to resolve conflict.');
+      setResolving(false);
+    }
+  };
 
   return (
     <div className="container mx-auto p-6">
@@ -75,6 +101,7 @@ const Requests = () => {
               <th className="px-4 py-2 text-left border-b">Event Name</th>
               <th className="px-4 py-2 text-left border-b">Conflicting Event</th>
               <th className="px-4 py-2 text-left border-b">Conflict Time</th>
+              <th className="px-4 py-2 text-left border-b">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -89,6 +116,15 @@ const Requests = () => {
                 </td>
                 <td className="px-4 py-2 border-b">
                   {new Date(conflict.Timestamp).toLocaleString()}
+                </td>
+                <td className="px-4 py-2 border-b">
+                  <button
+                    onClick={() => handleResolveConflict(conflict.conflictId)}
+                    disabled={resolving}
+                    className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition disabled:opacity-50"
+                  >
+                    {resolving ? 'Resolving...' : 'Resolve'}
+                  </button>
                 </td>
               </tr>
             ))}

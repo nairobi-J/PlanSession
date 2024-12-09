@@ -16,9 +16,7 @@ const EventPage = () => {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem("token");
-        const { data } = await axios.get("http://localhost:5000/api/events", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const { data } = await axios.get("http://localhost:5000/api/events");
 
         const formattedData = data.map((meeting) => ({
           id: meeting.id,
@@ -100,7 +98,7 @@ const EventPage = () => {
       const { data } = await axios.put(
         `http://localhost:5000/api/events/${meetingId}`,
         { status },
-        { headers: { Authorization: `Bearer ${token}` } }
+        { headers: { 'x-auth-token': token } }
       );
 
       // Update the status of the meeting in the frontend
@@ -126,7 +124,7 @@ const EventPage = () => {
       const { data } = await axios.post(
         "http://localhost:5000/api/booking",
         { eventId: meetingId },
-        { headers: { Authorization: `Bearer ${token}` } }
+        { headers: { 'x-auth-token': token } }
       );
 
       console.log("Booking successful:", data);
