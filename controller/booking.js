@@ -60,7 +60,7 @@ const getBookings = async (req, res) => {
 
         // Fetch all bookings for this user
         const [bookings] = await connection.execute(
-            `SELECT b.id AS bookingId, b.status, e.name AS eventName, e.date AS eventDate 
+            `SELECT b.bookingID AS bookingId, b.status, e.name AS eventName, e.date AS eventDate 
              FROM bookings b
              JOIN events e ON b.eventId = e.id
              WHERE b.userId = ?`, 

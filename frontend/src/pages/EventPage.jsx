@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from 'axios';
+import axios from "axios";
 
 const EventPage = () => {
   const [meetings, setMeetings] = useState([]);
@@ -11,19 +11,14 @@ const EventPage = () => {
   const [durationFilter, setDurationFilter] = useState("");
   const [startTimeFilter, setStartTimeFilter] = useState({ start: "", end: "" });
   const [dateFilter, setDateFilter] = useState("");
-// <<<<<<< jerin
-//   const [host, setHost] = useState('');
-// =======
-
-  const [eventId, setEventId] = useState(null); // For holding the selected event ID
-
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const token = localStorage.getItem('token');
-        const { data } = await axios.get(`http://localhost:5000/api/events`);
-        console.log(data);
+        const token = localStorage.getItem("token");
+        const { data } = await axios.get("http://localhost:5000/api/events", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
 
         const formattedData = data.map((meeting) => ({
           id: meeting.id,
@@ -48,16 +43,6 @@ const EventPage = () => {
 
     fetchData();
   }, []);
-
-
-  const fetchHost = async (ui) => {
-    const token = localStorage.getItem('token');
-    const { data } = await axios.get(`http://localhost:5000/api/user/${ui}`);
-    setHost(data.name);
-    console.log(data);
-  };
-
-
 
   // Filter function
   const applyFilters = () => {
@@ -108,41 +93,40 @@ const EventPage = () => {
     applyFilters();
   }, [searchQuery, statusFilter, durationFilter, startTimeFilter, dateFilter]);
 
-
   // Update status of the meeting
   const updateMeetingStatus = async (meetingId, status) => {
     try {
-      const token = localStorage.getItem('token');
-      const { data } = await axios.put(`http://localhost:5000/api/events/${meetingId}`, {
-        status,
-      }, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        }
-      });
+      const token = localStorage.getItem("token");
+      const { data } = await axios.put(
+        `http://localhost:5000/api/events/${meetingId}`,
+        { status },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
 
       // Update the status of the meeting in the frontend
-      setMeetings(prevMeetings =>
-        prevMeetings.map(meeting =>
-          meeting.id === meetingId ? { ...meeting, status: status } : meeting
+      setMeetings((prevMeetings) =>
+        prevMeetings.map((meeting) =>
+          meeting.id === meetingId ? { ...meeting, status } : meeting
         )
       );
-      setFilteredMeetings(prevMeetings =>
-        prevMeetings.map(meeting =>
-          meeting.id === meetingId ? { ...meeting, status: status } : meeting
+      setFilteredMeetings((prevMeetings) =>
+        prevMeetings.map((meeting) =>
+          meeting.id === meetingId ? { ...meeting, status } : meeting
         )
       );
       console.log(data);
     } catch (error) {
       console.error("Error updating event status:", error);
+    }
+  };
 
   const handleBookingRequest = async (meetingId) => {
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem("token");
       const { data } = await axios.post(
-        `http://localhost:5000/api/booking`,
-        { eventId: meetingId }, // Pass the event ID in the request body
-        { headers: { 'x-auth-token': token } } // Include token if required
+        "http://localhost:5000/api/booking",
+        { eventId: meetingId },
+        { headers: { Authorization: `Bearer ${token}` } }
       );
 
       console.log("Booking successful:", data);
@@ -150,7 +134,6 @@ const EventPage = () => {
     } catch (error) {
       console.error("Error sending booking request:", error);
       alert("Failed to send booking request.");
-
     }
   };
 
@@ -164,7 +147,6 @@ const EventPage = () => {
 
       {/* Filters */}
       <div className="mb-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-        {/* Search */}
         <input
           type="text"
           placeholder="Search by meeting name"
@@ -172,8 +154,6 @@ const EventPage = () => {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
-
-        {/* Status Filter */}
         <select
           className="border rounded-lg p-2"
           value={statusFilter}
@@ -184,8 +164,6 @@ const EventPage = () => {
           <option value="Done">Done</option>
           <option value="Cancelled">Cancelled</option>
         </select>
-
-        {/* Duration Filter */}
         <select
           className="border rounded-lg p-2"
           value={durationFilter}
@@ -196,24 +174,24 @@ const EventPage = () => {
           <option value="medium">Medium (30-60 min)</option>
           <option value="long">Long (&gt; 60 min)</option>
         </select>
-
-        {/* Start Time Filter */}
         <div className="flex gap-2">
           <input
             type="time"
             className="border rounded-lg p-2 w-full"
-            placeholder="Start time"
             value={startTimeFilter.start}
-            onChange={(e) => setStartTimeFilter((prev) => ({ ...prev, start: e.target.value }))} />
+            onChange={(e) =>
+              setStartTimeFilter((prev) => ({ ...prev, start: e.target.value }))
+            }
+          />
           <input
             type="time"
             className="border rounded-lg p-2 w-full"
-            placeholder="End time"
             value={startTimeFilter.end}
-            onChange={(e) => setStartTimeFilter((prev) => ({ ...prev, end: e.target.value }))} />
+            onChange={(e) =>
+              setStartTimeFilter((prev) => ({ ...prev, end: e.target.value }))
+            }
+          />
         </div>
-
-        {/* Date Filter */}
         <input
           type="date"
           className="border rounded-lg p-2"
@@ -232,28 +210,20 @@ const EventPage = () => {
             <h2 className="text-2xl font-semibold text-gray-800 mb-2">{meeting.title}</h2>
             <p className="text-sm text-gray-600 mb-2">Start: {meeting.start}</p>
             <p>End: {meeting.end}</p>
-            <p className="text-sm font-medium mb-4">
-              Status: {meeting.status}
-            </p>
+            <p className="text-sm font-medium mb-4">Status: {meeting.status}</p>
             <div className="flex gap-4">
+              
               <button
-
-                onClick={() => updateMeetingStatus(meeting.id, 'Approved')}
-                className="bg-green-500 text-white text-sm px-4 py-2 rounded-lg hover:bg-green-600 transition"
-              >
-                Approve
-
-                onClick={() => handleBookingRequest(meeting.id)} // Pass meeting ID on click
-                className="bg-blue-500 text-white text-sm px-4 py-2 rounded-lg hover:bg-blue-600 transition"
-              >
-                Booking Request
-
-              </button>
-              <button
-                onClick={() => updateMeetingStatus(meeting.id, 'Disapproved')}
+                onClick={() => updateMeetingStatus(meeting.id, "Disapproved")}
                 className="bg-red-500 text-white text-sm px-4 py-2 rounded-lg hover:bg-red-600 transition"
               >
                 Disapprove
+              </button>
+              <button
+                onClick={() => handleBookingRequest(meeting.id)}
+                className="bg-blue-500 text-white text-sm px-4 py-2 rounded-lg hover:bg-blue-600 transition"
+              >
+                Booking Request
               </button>
             </div>
           </div>
