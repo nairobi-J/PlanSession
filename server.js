@@ -14,6 +14,7 @@ const { postEvent, getAllEvents, getUserEvents, updateEvents, deleteEvents } = r
 const { startTime, duration, topUsers, topTypes, peakDays, averageDuration } = require("./controller/analysis");
 const {bookSlot, getBookings} = require("./controller/booking");
 const { checkEventConflict, checkBookingConflict, resolveConflict, getConflicts, suggestAlternateSlots } = require("./controller/conflict");
+const { createNotification, getNotifications, markAsRead , deleteNotification} = require("./controller/notification");
 
 const app = express();
 const PORT = 5000;
@@ -89,6 +90,10 @@ app.delete('/api/events/:id', deleteEvents);
   app.post('/api/conflict/resolve', resolveConflict);
   app.get('/api/conflict', getConflicts)
   app.post('/api/conflict/suggest', suggestAlternateSlots)
+  app.post('/api/notifications' , createNotification)
+  app.get('/api/notifications',getNotifications)
+  app.put('/api/notifications/:id/read' , markAsRead)
+  app.delete('/api/notifications/:id',deleteNotification)
   
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);

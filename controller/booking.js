@@ -47,6 +47,7 @@ const bookSlot = async (req, res) => {
     }
 };
 
+
 const getBookings = async (req, res) => {
     const userId = req.user.id; // Get userId from token (or session)
 
@@ -76,3 +77,4 @@ const getBookings = async (req, res) => {
 };
 
 module.exports = { bookSlot, getBookings };
+
