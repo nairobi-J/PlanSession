@@ -1,128 +1,134 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 
-const Analytics = () => {
-  const [analyticsData, setAnalyticsData] = useState({
-    createdEvents: 0,
-    completedEvents: 0,
-    rescheduledEvents: 0,
-    cancelledEvents: 0,
-    popularEvents: [],
-    popularTimes: [],
+const AnalyticsPage = () => {
+  const [analytics, setAnalytics] = useState({
+    startTime: [],
+    duration: [],
+    topUsers: [],
+    peakDays: [],
+    averageDuration: null,
   });
-
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [filter, setFilter] = useState("startTime");
 
   useEffect(() => {
-    // Mock API call to fetch analytics data (replace with actual API call)
     const fetchAnalytics = async () => {
-      setLoading(true);
-      setTimeout(() => {
-        setAnalyticsData({
-          createdEvents: 45,
-          completedEvents: 38,
-          rescheduledEvents: 5,
-          cancelledEvents: 2,
-          popularEvents: [
-            { name: "Team Meeting", count: 18 },
-            { name: "One-on-One", count: 12 },
-            { name: "Workshop", count: 8 },
-          ],
-          popularTimes: [
-            { time: "10:00 AM - 11:00 AM", count: 25 },
-            { time: "2:00 PM - 3:00 PM", count: 15 },
-            { time: "5:00 PM - 6:00 PM", count: 10 },
-          ],
+      try {
+        setLoading(true);
+
+        const [startTimeRes, durationRes, topUsersRes, peakDaysRes, avgDurationRes] = await Promise.all([
+          axios.get("http://localhost:5000/api/analysis/startTime"),
+          axios.get("http://localhost:5000/api/analysis/duration"),
+          axios.get("http://localhost:5000/api/analysis/topUsers"),
+          axios.get("http://localhost:5000/api/analysis/peakDays"),
+          axios.get("http://localhost:5000/api/analysis/averageDuration"),
+        ]);
+
+        setAnalytics({
+          startTime: startTimeRes.data,
+          duration: durationRes.data,
+          topUsers: topUsersRes.data,
+          peakDays: peakDaysRes.data,
+          averageDuration: avgDurationRes.data[0]?.avg_duration || 0,
         });
+        setError(null);
+      } catch (err) {
+        console.error("Error fetching analytics:", err);
+        setError("Failed to load analytics data.");
+      } finally {
         setLoading(false);
-      }, 1500); // Simulate network delay
+      }
     };
 
     fetchAnalytics();
   }, []);
 
+  if (loading) return <div className="text-center text-lg">Loading...</div>;
+  if (error) return <div className="text-center text-red-500">{error}</div>;
+
+  const renderData = () => {
+    switch (filter) {
+      case "startTime":
+        return (
+          <ul className="bg-gray-100 p-4 rounded-lg">
+            {analytics.startTime.map((item, index) => (
+              <li key={index} className="mb-2">
+                <strong>Hour:</strong> {item.meeting_hour} <strong>Meetings:</strong> {item.total_meetings}
+              </li>
+            ))}
+          </ul>
+        );
+      case "duration":
+        return (
+          <ul className="bg-gray-100 p-4 rounded-lg">
+            {analytics.duration.map((item, index) => (
+              <li key={index} className="mb-2">
+                <strong>Category:</strong> {item.duration_category} <strong>Meetings:</strong> {item.total_meetings}
+              </li>
+            ))}
+          </ul>
+        );
+      case "topUsers":
+        return (
+          <ol className="bg-gray-100 p-4 rounded-lg">
+            {analytics.topUsers.map((user, index) => (
+              <li key={index} className="mb-2">
+                <strong>User ID:</strong> {user.userId} <strong>Total Meetings:</strong> {user.total_meetings}
+              </li>
+            ))}
+          </ol>
+        );
+      case "peakDays":
+        return (
+          <ul className="bg-gray-100 p-4 rounded-lg">
+            {analytics.peakDays.map((day, index) => (
+              <li key={index} className="mb-2">
+                <strong>Day:</strong> {day.meeting_day} <strong>Meetings:</strong> {day.total_meetings}
+              </li>
+            ))}
+          </ul>
+        );
+      case "averageDuration":
+        return (
+          <div className="bg-gray-100 p-4 rounded-lg">
+            <strong>Average Duration:</strong> {Math.round(analytics.averageDuration)} minutes
+          </div>
+        );
+      default:
+        return <div>Select a valid filter.</div>;
+    }
+  };
+
   return (
-    <div className="">
-      <h1 className="">
-        Stats & Analytics
-      </h1>
+    <div className="container mx-auto p-6">
+      <h1 className="text-2xl font-bold text-center mb-6">Analytics Insights</h1>
 
-      {loading ? (
-        <div className="">
-          <p className="">Loading analytics...</p>
-        </div>
-      ) : (
-        <div className="">
-          {/* Overview Section */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="bg-blue-100 p-4 rounded-lg text-center">
-              <h2 className="text-xl font-semibold text-blue-800">
-                {analyticsData.createdEvents}
-              </h2>
-              <p className="text-gray-600">Created Events</p>
-            </div>
-            <div className="bg-green-100 p-4 rounded-lg text-center">
-              <h2 className="text-xl font-semibold text-green-800">
-                {analyticsData.completedEvents}
-              </h2>
-              <p className="text-gray-600">Completed Events</p>
-            </div>
-            <div className="bg-yellow-100 p-4 rounded-lg text-center">
-              <h2 className="text-xl font-semibold text-yellow-800">
-                {analyticsData.rescheduledEvents}
-              </h2>
-              <p className="text-gray-600">Rescheduled Events</p>
-            </div>
-            <div className="bg-red-100 p-4 rounded-lg text-center">
-              <h2 className="text-xl font-semibold text-red-800">
-                {analyticsData.cancelledEvents}
-              </h2>
-              <p className="text-gray-600">Cancelled Events</p>
-            </div>
-          </div>
+      <div className="mb-4">
+        <label htmlFor="filter" className="block text-sm font-medium text-gray-700 mb-2">
+          Filter Analysis:
+        </label>
+        <select
+          id="filter"
+          value={filter}
+          onChange={(e) => setFilter(e.target.value)}
+          className="block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+        >
+          <option value="startTime">Meeting Start Times</option>
+          <option value="duration">Meeting Durations</option>
+          <option value="topUsers">Top Users</option>
+          <option value="peakDays">Peak Days</option>
+          <option value="averageDuration">Average Duration</option>
+        </select>
+      </div>
 
-          {/* Popular Events Section */}
-          <div>
-            <h2 className="text-2xl font-bold text-gray-800 mb-4">
-              Popular Events
-            </h2>
-            <ul className="space-y-3">
-              {analyticsData.popularEvents.map((event, index) => (
-                <li
-                  key={index}
-                  className="flex justify-between bg-gray-100 p-3 rounded-lg"
-                >
-                  <span className="text-gray-700">{event.name}</span>
-                  <span className="font-medium text-gray-800">
-                    {event.count} bookings
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Popular Times Section */}
-          <div>
-            <h2 className="text-2xl font-bold text-gray-800 mb-4">
-              Popular Times
-            </h2>
-            <ul className="space-y-3">
-              {analyticsData.popularTimes.map((time, index) => (
-                <li
-                  key={index}
-                  className="flex justify-between bg-gray-100 p-3 rounded-lg"
-                >
-                  <span className="text-gray-700">{time.time}</span>
-                  <span className="font-medium text-gray-800">
-                    {time.count} bookings
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      )}
+      <section className="mb-8">
+        <h2 className="text-xl font-semibold mb-4">Analysis Results</h2>
+        {renderData()}
+      </section>
     </div>
   );
 };
 
-export default Analytics;
+export default AnalyticsPage;

@@ -17,6 +17,8 @@ const MeetingsPage = () => {
           }
         } );
 
+        console.log(JSON.stringify(data))
+
         // Map data to match frontend structure
         const formattedData = data.map((meeting) => ({
           id: meeting.id,
