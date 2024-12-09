@@ -219,12 +219,8 @@ const EventPage = () => {
                 onClick={() => updateMeetingStatus(meeting.id, 'Approved')}
                 className="bg-green-500 text-white text-sm px-4 py-2 rounded-lg hover:bg-green-600 transition"
               >
-                DisApprove
+                Disapprove
 
-                onClick={() => handleBookingRequest(meeting.id)} // Pass meeting ID on click
-                className="bg-blue-500 text-white text-sm px-4 py-2 rounded-lg hover:bg-blue-600 transition"
-
-                Booking Request
 
               </button>
               <button
@@ -240,7 +236,5 @@ const EventPage = () => {
     </div>
   );
 };
-  }
-}
-
+ 
 export default EventPage;

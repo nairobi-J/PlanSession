@@ -67,28 +67,18 @@ app.delete('/api/events/:id', deleteEvents);
   app.post('/api/booking', authMiddleware, bookSlot);
   app.get('/api/booking', authMiddleware, getBookings);
 
-  // app.get('/api/booking/:id', getBooking);
-  // app.put('/api/booking/:id', updateBooking);
-  // app.delete('/api/booking/:id', deleteBooking);
+  app.get('/api/booking/:id', getBooking);
+  app.put('/api/booking/:id', updateBooking);
+  app.delete('/api/booking/:id', deleteBooking);
 
-  // app.get('/api/booking/user/:id', getUserBookings);
+  app.get('/api/booking/user/:id', getUserBookings);
 
-  // app.get('/api/booking/date/:date', getBookingsByDate);
-
-  // app.get('/api/booking/type/:type', getBookingsByType);
-
-  // app.get('/api/booking/slot/:start/:end', getAvailableSlots);
-
-  // app.get('/api/booking/conflict/:id', getConflictingBookings);
-
-  // app.get('/api/booking/available/:id', getAvailableBookings);
-
-  // app.get('/api/booking/duration/:id', getBookingDuration);
-
+ 
   app.post('/api/conflict/checkEvent', checkEventConflict);
   app.post('/api/conflict/checkBooking', checkBookingConflict);
   app.post('/api/conflict/resolve', resolveConflict);
   app.get('/api/conflict', getConflicts)
+  
   app.post('/api/conflict/suggest', suggestAlternateSlots)
   app.post('/api/notifications' , createNotification)
   app.get('/api/notifications',getNotifications)

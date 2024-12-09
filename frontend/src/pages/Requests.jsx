@@ -16,7 +16,7 @@ const Requests = () => {
           axios.get('http://localhost:5000/api/booking', {
             headers: { 'x-auth-token': token },
           }),
-          axios.get('http://localhost:5000/api/conflicts', {
+          axios.get('http://localhost:5000/api/conflict', {
             headers: { 'x-auth-token': token },
           }),
         ]);
@@ -79,13 +79,13 @@ const Requests = () => {
           </thead>
           <tbody>
             {conflicts.map((conflict) => (
-              <tr key={conflict.ConflictID}>
-                <td className="px-4 py-2 border-b">{conflict.ConflictID}</td>
+              <tr key={conflict.conflictId}>
+                <td className="px-4 py-2 border-b">{conflict.conflictId}</td>
                 <td className="px-4 py-2 border-b">
-                  {conflict.EventName} ({conflict.EventStartTime} - {conflict.EventEndTime})
+                  {conflict.eventId} ({conflict.EventStartTime} - {conflict.EventEndTime})
                 </td>
                 <td className="px-4 py-2 border-b">
-                  {conflict.ConflictingEventName} ({conflict.ConflictingEventStartTime} - {conflict.ConflictingEventEndTime})
+                  {conflict.conflictingEventId} ({conflict.ConflictingEventStartTime} - {conflict.ConflictingEventEndTime})
                 </td>
                 <td className="px-4 py-2 border-b">
                   {new Date(conflict.Timestamp).toLocaleString()}
