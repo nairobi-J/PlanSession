@@ -351,5 +351,19 @@ const zones = [
     "Pacific/Tongatapu",
     "WET"
   ]
+  function getLocalTime() {
+    // Get the current local time
+    const localTime = new Date().toLocaleTimeString();
+    return localTime;
+}
 
-  export {zones}
+function convertLocalTimeToUTC() {
+    // Get the local time
+    const localTime = getLocalTime();
+
+    // Convert local time to UTC using toISOString() method
+    const utcTime = localTime.toISOString();
+    return utcTime;
+}
+
+  export {zones,getLocalTime,convertLocalTimeToUTC}
