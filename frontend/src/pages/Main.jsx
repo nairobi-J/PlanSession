@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { Link, Outlet, useNavigate } from 'react-router-dom'; // Use Outlet to render nested routes
 import { Search } from 'lucide-react'; // Search icon
+import { getLocalTime } from '../resource';
 
 const Main = () => {
   const [isDashboardCollapsed, setIsDashboardCollapsed] = useState(false); // For dashboard size toggle
@@ -50,17 +51,31 @@ const Main = () => {
   const handleClick = () => {
     navigate('/main');
   }
-
-
+ 
+ 
   // Apply filters based on the input values
   const applyFilters = () => {
     // Here you can implement logic to filter your slots data based on searchTerm, date range, time, and hostName
     console.log('Applying Filters:', { searchTerm, startDate, endDate, timePreference, hostName });
   };
+  const [localTime, setLocalTime] = useState(getLocalTime());
 
+
+    // Fetch the local time when the component mounts
+    useEffect(() => {
+      // Update the local time every second
+      const intervalId = setInterval(() => {
+          setLocalTime(getLocalTime());  // Call getLocalTime and update state
+      }, 1000);  // 1000ms = 1 second
+
+      // Clean up the interval when the component unmounts
+      return () => clearInterval(intervalId);
+  }, []);
   return (
     <div className="flex flex-col w-screen">
-      <div className="p-4 flex flex-col shadow-lg ">
+      <div className="p-4 flex flex-col shadow-lg "> 
+     
+     
         {/* Header Section */}
         <div className="flex  p-4 items-center justify-between gap-4 shadow-lg">
          
@@ -128,6 +143,9 @@ const Main = () => {
         >
           Apply Filters
         </button>
+        <div className='flex justify-center items-center text-2xl text-green-500'>
+         {localTime}
+        </div>
        </div>
         {/* Search Bar */}
         {/* <div className="flex items-center">
