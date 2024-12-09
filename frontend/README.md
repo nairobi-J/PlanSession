@@ -43,3 +43,12 @@ Once dependencies are installed and environment variables are set, start the dev
 npm start
 ```
 The application will be running on http://localhost:3000
+
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+ this is an Meeting scheduler which will have guest mode and host mode available for scheduling meeting
+ hosts can create meetings
+ guests can book meeting
+ hosts has ability to delete or approve or disapprove any time slot
+ 
+
