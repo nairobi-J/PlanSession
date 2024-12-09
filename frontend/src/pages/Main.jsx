@@ -10,7 +10,7 @@ const Main = () => {
   const [endDate, setEndDate] = useState(""); // For date range end
   const [timePreference, setTimePreference] = useState(""); // For time preference
   const [hostName, setHostName] = useState(""); // For host name filtering
-
+  
   const toggleDashboardSize = () => {
     setIsDashboardCollapsed(!isDashboardCollapsed);
   };
@@ -39,11 +39,18 @@ const Main = () => {
   const handleHostChange = (event) => {
     setHostName(event.target.value);
   };
+  const handleLogOut =(e)=>{
+    localStorage.removeItem('token'); 
+
+
+    window.location.href = '/';
+  }
 
   const navigate = useNavigate();
   const handleClick = () => {
     navigate('/main');
   }
+
 
   // Apply filters based on the input values
   const applyFilters = () => {
@@ -57,11 +64,7 @@ const Main = () => {
         {/* Header Section */}
         <div className="flex gap-5 mt-4">
           <div onClick={handleClick}>
-            <img
-              src="logo.png" // Replace with actual image if available
-              alt="PlanSession"
-              className="w-10 h-10"
-            />
+               Session
           </div>
 
           <Link to="event" className="text-green-500">Event</Link>
@@ -71,6 +74,8 @@ const Main = () => {
           <Link to="notifications" className="text-green-500">Notifications</Link>
           <Link to="create" className="text-green-500">Create</Link>
           <Link to="profile" className="text-green-500">Profile</Link>
+          <Link to="requests" className="text-green-500">Requests</Link>
+          <button onClick={handleLogOut}>Log Out</button>
         </div>
 
         {/* Search Bar */}
