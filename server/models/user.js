@@ -23,16 +23,7 @@ const userSchema = new mongose.Schema({
     required: true,
   },
 
-  isGuest: {
-    type: Boolean,
-    required: true,
-    default: false,
-  },
-  isHost: {
-    type: Boolean,
-    required: true,
-    default: false,
-  },
+  
 
   createdAt: {
     type: Date,
