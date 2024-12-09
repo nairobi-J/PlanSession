@@ -50,6 +50,7 @@ const App = () => {
           <Route path="notifications" element={<NotificationsPage />} />
           <Route path="create" element={<Create />} />
           <Route path='profile' element={<Profile />} />
+          <Route path='requests' element={<Request/>} />
         </Route>
         
         {/* Home route */}

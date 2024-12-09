@@ -12,7 +12,7 @@ require("dotenv").config();
 const {signup, login, getUser, getUserById} = require('./controller/user');
 const { postEvent, getAllEvents, getUserEvents, updateEvents, deleteEvents } = require("./controller/event");
 const { startTime, duration, topUsers, topTypes, peakDays, averageDuration } = require("./controller/analysis");
-const {bookSlot} = require("./controller/booking");
+const {bookSlot, getBookings} = require("./controller/booking");
 const { checkEventConflict, checkBookingConflict, resolveConflict, getConflicts, suggestAlternateSlots } = require("./controller/conflict");
 
 const app = express();
@@ -64,6 +64,7 @@ app.delete('/api/events/:id', deleteEvents);
   app.get('/api/analysis/averageDuration', averageDuration);
 
   app.post('/api/booking', authMiddleware, bookSlot);
+  app.get('/api/booking', authMiddleware, getBookings)
 
   // app.get('/api/booking/:id', getBooking);
   // app.put('/api/booking/:id', updateBooking);

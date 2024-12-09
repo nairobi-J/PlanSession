@@ -11,10 +11,7 @@ const EventPage = () => {
   const [durationFilter, setDurationFilter] = useState("");
   const [startTimeFilter, setStartTimeFilter] = useState({ start: "", end: "" });
   const [dateFilter, setDateFilter] = useState("");
-
-  const[host, setHost] = useState('')
-
-
+  const [host, setHost] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -47,15 +44,13 @@ const EventPage = () => {
     fetchData();
   }, []);
 
-  
-  const fetch = async(req, res)=>{
+  const fetchHost = async (ui) => {
     const token = localStorage.getItem('token');
-      const { data } = await axios.get(`http://localhost:5000/api/user/${ui}`
-      )
-      setHost(data.name)
-      console.log(data)
-    
-  }
+    const { data } = await axios.get(`http://localhost:5000/api/user/${ui}`);
+    setHost(data.name);
+    console.log(data);
+  };
+
   // Filter function
   const applyFilters = () => {
     let filtered = [...meetings];
@@ -104,6 +99,35 @@ const EventPage = () => {
   useEffect(() => {
     applyFilters();
   }, [searchQuery, statusFilter, durationFilter, startTimeFilter, dateFilter]);
+
+  // Update status of the meeting
+  const updateMeetingStatus = async (meetingId, status) => {
+    try {
+      const token = localStorage.getItem('token');
+      const { data } = await axios.put(`http://localhost:5000/api/events/${meetingId}`, {
+        status,
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        }
+      });
+
+      // Update the status of the meeting in the frontend
+      setMeetings(prevMeetings =>
+        prevMeetings.map(meeting =>
+          meeting.id === meetingId ? { ...meeting, status: status } : meeting
+        )
+      );
+      setFilteredMeetings(prevMeetings =>
+        prevMeetings.map(meeting =>
+          meeting.id === meetingId ? { ...meeting, status: status } : meeting
+        )
+      );
+      console.log(data);
+    } catch (error) {
+      console.error("Error updating event status:", error);
+    }
+  };
 
   return (
     <div className="p-6 min-h-screen">
@@ -155,15 +179,13 @@ const EventPage = () => {
             className="border rounded-lg p-2 w-full"
             placeholder="Start time"
             value={startTimeFilter.start}
-            onChange={(e) => setStartTimeFilter((prev) => ({ ...prev, start: e.target.value }))}
-          />
+            onChange={(e) => setStartTimeFilter((prev) => ({ ...prev, start: e.target.value }))} />
           <input
             type="time"
             className="border rounded-lg p-2 w-full"
             placeholder="End time"
             value={startTimeFilter.end}
-            onChange={(e) => setStartTimeFilter((prev) => ({ ...prev, end: e.target.value }))}
-          />
+            onChange={(e) => setStartTimeFilter((prev) => ({ ...prev, end: e.target.value }))} />
         </div>
 
         {/* Date Filter */}
@@ -190,11 +212,17 @@ const EventPage = () => {
               Status: {meeting.status}
             </p>
             <div className="flex gap-4">
-              <button className="bg-blue-500 text-white text-sm px-4 py-2 rounded-lg hover:bg-blue-600 transition">
-                View Booking
+              <button
+                onClick={() => updateMeetingStatus(meeting.id, 'Approved')}
+                className="bg-green-500 text-white text-sm px-4 py-2 rounded-lg hover:bg-green-600 transition"
+              >
+                Approve
               </button>
-              <button className="bg-red-500 text-white text-sm px-4 py-2 rounded-lg hover:bg-red-600 transition">
-                Cancel
+              <button
+                onClick={() => updateMeetingStatus(meeting.id, 'Disapproved')}
+                className="bg-red-500 text-white text-sm px-4 py-2 rounded-lg hover:bg-red-600 transition"
+              >
+                Disapprove
               </button>
             </div>
           </div>
