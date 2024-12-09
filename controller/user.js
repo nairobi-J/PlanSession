@@ -101,5 +101,32 @@ const signup = async (req, res) => {
       } catch (error) {}
     }
 
+    const getUser = async(req, res)=>{
+      if(!req.user){
+        return res.status(401).json({msg: "Not authenticated"});
+      }
+      try{
+        const connection = await mysql.createConnection(dbConfig);
+        const [rows] = await connection.execute("SELECT * FROM users WHERE id =?", [req.user.id]);
+        await connection.end();
+        res.json(rows[0]);
+      }catch(error){
+        res.status(500).json({error: "Server error"});
+      }
+    }
 
-  module.exports = {signup, login}
+    const getUserById = async (req, res)=>{
+      const userId = req.params.id;
+      try{
+        const connection = await mysql.createConnection(dbConfig);
+        const [rows] = await connection.execute("SELECT * FROM users WHERE id =?", [userId]);
+        await connection.end();
+        if(rows.length === 0){
+          return res.status(404).json({msg: "User not found"});
+        }
+        res.json(rows[0]);
+      }catch(error){
+        res.status(500).json({error: "Server error"});
+      }
+    }
+  module.exports = {signup, login, getUser, getUserById}

@@ -9,10 +9,11 @@ const mysql = require("mysql2/promise");
 const { check, validationResult, param } = require("express-validator");
 require("dotenv").config();
 
-const {signup, login} = require('./controller/user');
+const {signup, login, getUser, getUserById} = require('./controller/user');
 const { postEvent, getAllEvents, getUserEvents, updateEvents, deleteEvents } = require("./controller/event");
 const { startTime, duration, topUsers, topTypes, peakDays, averageDuration } = require("./controller/analysis");
-
+const {bookSlot} = require("./controller/booking");
+const { checkEventConflict, checkBookingConflict, resolveConflict, getConflicts, suggestAlternateSlots } = require("./controller/conflict");
 
 const app = express();
 const PORT = 5000;
@@ -46,6 +47,8 @@ const authMiddleware = async (req, res, next) => {
 
 app.post("/api/signup", signup);
 app.post("/api/login", login);
+app.get('/api/getUser', authMiddleware, getUser);
+app.get('/api/user/:id', getUserById)
 
 app.post('/api/events',authMiddleware, postEvent);
 app.get('/api/events', getAllEvents);
@@ -59,6 +62,32 @@ app.delete('/api/events/:id', deleteEvents);
   app.get('/api/analysis/topTypes', topTypes);
   app.get('/api/analysis/peakDays', peakDays);
   app.get('/api/analysis/averageDuration', averageDuration);
+
+  app.post('/api/booking', authMiddleware, bookSlot);
+
+  // app.get('/api/booking/:id', getBooking);
+  // app.put('/api/booking/:id', updateBooking);
+  // app.delete('/api/booking/:id', deleteBooking);
+
+  // app.get('/api/booking/user/:id', getUserBookings);
+
+  // app.get('/api/booking/date/:date', getBookingsByDate);
+
+  // app.get('/api/booking/type/:type', getBookingsByType);
+
+  // app.get('/api/booking/slot/:start/:end', getAvailableSlots);
+
+  // app.get('/api/booking/conflict/:id', getConflictingBookings);
+
+  // app.get('/api/booking/available/:id', getAvailableBookings);
+
+  // app.get('/api/booking/duration/:id', getBookingDuration);
+
+  app.post('/api/conflict/checkEvent', checkEventConflict);
+  app.post('/api/conflict/checkBooking', checkBookingConflict);
+  app.post('/api/conflict/resolve', resolveConflict);
+  app.get('/api/conflict', getConflicts)
+  app.post('/api/conflict/suggest', suggestAlternateSlots)
   
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
