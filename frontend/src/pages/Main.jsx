@@ -60,13 +60,14 @@ const Main = () => {
 
   return (
     <div className="flex flex-col w-screen">
-      <div className="p-4 flex flex-col shadow-lg">
+      <div className="p-4 flex flex-col shadow-lg ">
         {/* Header Section */}
-        <div className="flex gap-5 mt-4">
-          <div onClick={handleClick}>
+        <div className="flex  p-4 items-center justify-between gap-4 shadow-lg">
+         
+          <div className='items-start flex gap-5 '>
+          <div onClick={handleClick} className='text-green-600 text-2xl'>
                Session
           </div>
-
           <Link to="event" className="text-green-500">Event</Link>
           <Link to="availability" className="text-green-500">Availability</Link>
           <Link to="meetings" className="text-green-500">Meetings</Link>
@@ -75,23 +76,14 @@ const Main = () => {
           <Link to="create" className="text-green-500">Create</Link>
           <Link to="profile" className="text-green-500">Profile</Link>
           <Link to="requests" className="text-green-500">Requests</Link>
+          </div>
+          <div className='items-end'>
           <button onClick={handleLogOut}>Log Out</button>
+          </div>
+         
         </div>
-
-        {/* Search Bar */}
-        <div className="flex items-center mt-4">
-          <Search className="text-gray-500 mr-3" size={24} />
-          <input
-            type="text"
-            placeholder="Search..."
-            className="outline-none text-sm text-gray-700 placeholder-gray-400 bg-transparent"
-            value={searchTerm}
-            onChange={handleSearchChange}
-          />
-        </div>
-
-        {/* Date Range and Time Preferences Filters */}
-        <div className="mt-4">
+       <div className='flex flex-row gap-20 mt-4'>
+       <div className="mt-4 ">
           <input
             type="date"
             name="startDate"
@@ -132,10 +124,26 @@ const Main = () => {
 
         <button
           onClick={applyFilters}
-          className="mt-6 py-2 px-4 bg-gradient-to-r from-green-200 to-green-100 rounded-md text-black"
+          className="w-20 bg-gradient-to-r from-green-200 to-green-100 rounded-md text-black"
         >
           Apply Filters
         </button>
+       </div>
+        {/* Search Bar */}
+        {/* <div className="flex items-center">
+          <Search className="text-gray-500 mr-3" size={24} />
+          <input
+            type="text"
+            placeholder="Search..."
+            className="outline-none text-sm text-gray-700 placeholder-gray-400 bg-transparent"
+            value={searchTerm}
+            onChange={handleSearchChange}
+          />
+          <hr/>
+        </div> */}
+
+        {/* Date Range and Time Preferences Filters */}
+        
       </div>
 
       <div className="">

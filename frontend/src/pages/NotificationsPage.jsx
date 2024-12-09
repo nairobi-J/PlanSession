@@ -26,7 +26,7 @@ const NotificationsPage = () => {
   };
 
   return (
-    <div className=" bg-gray-100">
+    <div className=" bg-gray-100 p-8">
       <h2 className="text-2xl font-semibold  text-gray-800 mb-6">Notifications</h2>
       
       {/* Add Notification Button */}
@@ -37,7 +37,7 @@ const NotificationsPage = () => {
         Add Notification
       </button>
 
-      <div className="  space-y-4">
+      <div className="  space-y-4 ">
         {notifications.length === 0 ? (
           <p className="text-gray-500 text-center">No notifications yet.</p>
         ) : (
@@ -52,7 +52,7 @@ const NotificationsPage = () => {
               </div>
               <button
                 onClick={() => deleteNotification(notification.id)}
-                className="ml-4 text-red-500 hover:text-red-700"
+                className="ml-4 text-white bg-red-500 hover:text-red-700"
               >
                 Delete
               </button>

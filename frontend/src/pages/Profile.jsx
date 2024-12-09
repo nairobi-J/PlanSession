@@ -62,27 +62,27 @@ const Profile = () => {
         user.theme === 'light' ? 'bg-gray-100 text-black' : 'bg-black text-white'
       } p-8 min-h-screen w-screen transition-all duration-300`}
     >
-      <div className="flex justify-center items-center flex-col">
+      <div className="flex justify-center  flex-col space-y-8">
         {/* Profile Picture */}
         <div className="flex justify-center items-center mb-6">
           <img
             src="https://via.placeholder.com/150"
             alt="Profile"
-            className="rounded-full mb-4 w-40 h-40 border-4 border-blue-500"
+            className="rounded-full mb-4 w-40 h-40 border-4 border-green-500"
           />
         </div>
 
         {/* Username and Role */}
         <div className="text-center">
-          <h1 className="text-3xl font-semibold">{user.username}</h1>
-          <p className="text-lg text-gray-500">{user.role === 'host' ? 'Host' : 'Guest'}</p>
+          <h1 className="text-3xl font-semibold">User: {user.username}</h1>
+          <p className="text-2xl text-gray-500">Role: {user.role === 'host' ? 'Host' : 'Guest'}</p>
         </div>
 
         {/* Edit Username Button */}
-        <div className="flex justify-center mt-4">
+        <div className="flex  mt-4">
           <button
             onClick={() => setEditUsername(true)}
-            className="bg-blue-500 text-white p-2 rounded-md flex items-center gap-2 hover:bg-blue-600 transition-all duration-300"
+            className="bg-green-500 text-black p-3 rounded-lg flex items-center gap-2 hover:bg-blue-600 transition-all duration-300"
           >
             <FaUserEdit /> Edit Name
           </button>
@@ -90,31 +90,31 @@ const Profile = () => {
 
         {/* Editable Username Section */}
         {editUsername && (
-          <div className="mt-4 p-4 border border-gray-300 rounded-md shadow-lg max-w-xs mx-auto">
+          <div className="mt-4 p-6 border border-gray-300 rounded-lg shadow-xl max-w-lg mx-auto bg-white">
             <input
               type="text"
               value={newUsername}
               onChange={(e) => setNewUsername(e.target.value)}
-              className="p-2 w-full border border-gray-400 rounded-md mb-2"
+              className="p-3 w-full border border-gray-400 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Enter new username"
             />
             <input
               type="password"
               value={passwordForName}
               onChange={(e) => setPasswordForName(e.target.value)}
-              className="p-2 w-full border border-gray-400 rounded-md mb-4"
+              className="p-3 w-full border border-gray-400 rounded-lg mb-6 focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Enter password to confirm"
             />
             <div className="flex justify-between">
               <button
                 onClick={handleEditUsername}
-                className="bg-green-500 text-white p-2 rounded-md hover:bg-green-600 transition-all duration-300"
+                className="bg-green-500 text-white p-3 rounded-lg hover:bg-green-600 transition-all duration-300"
               >
                 Save
               </button>
               <button
                 onClick={() => setEditUsername(false)}
-                className="bg-red-500 text-white p-2 rounded-md hover:bg-red-600 transition-all duration-300"
+                className="bg-red-500 text-white p-3 rounded-lg hover:bg-red-600 transition-all duration-300"
               >
                 Cancel
               </button>
@@ -124,13 +124,13 @@ const Profile = () => {
 
         {/* Password Editing (only for hosts) */}
         <div className="mt-8">
-          <h2 className="text-xl font-semibold">Password:</h2>
+          <h2 className="text-xl font-semibold"></h2>
           {user.role === 'host' && !editPassword && (
             <div className="flex justify-between items-center">
-              <p>********</p>
+            
               <button
                 onClick={() => setEditPassword(true)}
-                className="bg-blue-500 text-white p-2 rounded-md flex items-center gap-2 hover:bg-blue-600 transition-all duration-300"
+                className="bg-green-400 text-black p-3 rounded-lg flex items-center gap-2 hover:bg-blue-600 transition-all duration-300"
               >
                 <FaKey /> Edit Password
               </button>
@@ -139,12 +139,12 @@ const Profile = () => {
 
           {/* Editable Password */}
           {editPassword && (
-            <div className="mt-4 p-4 border border-gray-300 rounded-md shadow-lg max-w-xs mx-auto">
+            <div className="mt-4 p-6 border border-gray-300 rounded-lg shadow-xl max-w-lg mx-auto bg-white">
               <input
                 type="password"
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
-                className="p-2 w-full border border-gray-400 rounded-md mb-2"
+                className="p-3 w-full border border-gray-400 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Enter new password"
               />
               {user.role === 'host' && (
@@ -152,20 +152,20 @@ const Profile = () => {
                   type="email"
                   value={newEmail}
                   onChange={(e) => setNewEmail(e.target.value)}
-                  className="p-2 w-full border border-gray-400 rounded-md mb-4"
+                  className="p-3 w-full border border-gray-400 rounded-lg mb-6 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="Enter new email"
                 />
               )}
               <div className="flex justify-between">
                 <button
                   onClick={handleEditPassword}
-                  className="bg-green-500 text-white p-2 rounded-md hover:bg-green-600 transition-all duration-300"
+                  className="bg-green-500 text-white p-3 rounded-lg hover:bg-green-600 transition-all duration-300"
                 >
                   Save
                 </button>
                 <button
                   onClick={() => setEditPassword(false)}
-                  className="bg-red-500 text-white p-2 rounded-md hover:bg-red-600 transition-all duration-300"
+                  className="bg-red-500 text-white p-3 rounded-lg hover:bg-red-600 transition-all duration-300"
                 >
                   Cancel
                 </button>
@@ -175,14 +175,7 @@ const Profile = () => {
         </div>
 
         {/* Theme Toggle Button */}
-        <div className="mt-8">
-          <button
-            onClick={toggleTheme}
-            className="bg-yellow-500 text-white p-2 rounded-md hover:bg-yellow-600 transition-all duration-300 flex items-center gap-2"
-          >
-            {user.theme === 'light' ? <FaSun /> : <FaMoon />} Toggle Theme
-          </button>
-        </div>
+       
       </div>
     </div>
   );
