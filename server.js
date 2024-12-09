@@ -65,7 +65,7 @@ app.delete('/api/events/:id', deleteEvents);
   app.get('/api/analysis/averageDuration', averageDuration);
 
   app.post('/api/booking', authMiddleware, bookSlot);
-  app.get('/api/booking', authMiddleware, getBookings)
+  app.get('/api/booking', authMiddleware, getBookings);
 
   // app.get('/api/booking/:id', getBooking);
   // app.put('/api/booking/:id', updateBooking);

@@ -71,8 +71,13 @@ const resolveConflict = async (req, res) => {
 
 const getConflicts = async (req, res) => {
     const query = `
-        SELECT * FROM ConflictResolution
-        ORDER BY Timestamp DESC
+        SELECT cr.ConflictID, cr.Timestamp, 
+               e1.name AS EventName, e1.date AS EventDate, e1.startTime AS EventStartTime, e1.endTime AS EventEndTime,
+               e2.name AS ConflictingEventName, e2.date AS ConflictingEventDate, e2.startTime AS ConflictingEventStartTime, e2.endTime AS ConflictingEventEndTime
+        FROM ConflictResolution cr
+        JOIN events e1 ON cr.EventID = e1.id
+        JOIN events e2 ON cr.ConflictingEventID = e2.id
+        ORDER BY cr.Timestamp DESC
     `;
 
     try {
