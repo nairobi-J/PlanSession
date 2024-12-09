@@ -11,15 +11,9 @@ import Modal from './components/Modal';
 import Create from './pages/Create';
 import Profile from './pages/Profile';
 import Dummy from './pages/Dummy';
-import { generateToken } from './notification/firebase'; // Import the function
-import { onMessage } from 'firebase/messaging';
+
 
 const App = () => {
-
-  const handleNotificationPermission = () => {
-    console.log('Requesting notification permission...');
-    generateToken(); // Request permission and fetch the FCM token
-  };
 
   const [isModalVisible, setIsModalVisible] = useState(false); // Modal visibility state
   const [modalType, setModalType] = useState(''); // For controlling modal type (guest or host)
@@ -64,12 +58,7 @@ const App = () => {
         />
       )}
 
-      {/* Add a button to manually trigger notification permission request */}
-      <div>
-      <button onClick={handleNotificationPermission}>
-        Enable Notifications
-      </button>
-      </div>
+     
       
     </Router>
   );

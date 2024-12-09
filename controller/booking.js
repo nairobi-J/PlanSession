@@ -47,4 +47,6 @@ const bookSlot = async (req, res) => {
     }
 };
 
+
+
 module.exports = { bookSlot };

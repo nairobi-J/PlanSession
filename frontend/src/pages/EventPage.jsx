@@ -12,16 +12,14 @@ const EventPage = () => {
   const [startTimeFilter, setStartTimeFilter] = useState({ start: "", end: "" });
   const [dateFilter, setDateFilter] = useState("");
 
-  const[host, setHost] = useState('')
-
-
+  const [eventId, setEventId] = useState(null); // For holding the selected event ID
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem('token');
         const { data } = await axios.get(`http://localhost:5000/api/events`);
-        console.log(data)
+        console.log(data);
 
         const formattedData = data.map((meeting) => ({
           id: meeting.id,
@@ -34,7 +32,7 @@ const EventPage = () => {
           status: meeting.status || "Scheduled",
           start: meeting.startTime,
           end: meeting.endTime,
-          ui: meeting.userId
+          userId: meeting.userId,
         }));
 
         setMeetings(formattedData);
@@ -47,15 +45,6 @@ const EventPage = () => {
     fetchData();
   }, []);
 
-  
-  const fetch = async(req, res)=>{
-    const token = localStorage.getItem('token');
-      const { data } = await axios.get(`http://localhost:5000/api/user/${ui}`
-      )
-      setHost(data.name)
-      console.log(data)
-    
-  }
   // Filter function
   const applyFilters = () => {
     let filtered = [...meetings];
@@ -104,6 +93,23 @@ const EventPage = () => {
   useEffect(() => {
     applyFilters();
   }, [searchQuery, statusFilter, durationFilter, startTimeFilter, dateFilter]);
+
+  const handleBookingRequest = async (meetingId) => {
+    try {
+      const token = localStorage.getItem('token');
+      const { data } = await axios.post(
+        `http://localhost:5000/api/booking`,
+        { eventId: meetingId }, // Pass the event ID in the request body
+        { headers: { 'x-auth-token': token } } // Include token if required
+      );
+
+      console.log("Booking successful:", data);
+      alert("Booking request sent successfully!");
+    } catch (error) {
+      console.error("Error sending booking request:", error);
+      alert("Failed to send booking request.");
+    }
+  };
 
   return (
     <div className="p-6 min-h-screen">
@@ -183,15 +189,17 @@ const EventPage = () => {
             className="bg-white shadow-md rounded-xl p-6 border hover:shadow-xl transition-shadow"
           >
             <h2 className="text-2xl font-semibold text-gray-800 mb-2">{meeting.title}</h2>
-            <h3>{host}</h3>
             <p className="text-sm text-gray-600 mb-2">Start: {meeting.start}</p>
             <p>End: {meeting.end}</p>
             <p className="text-sm font-medium mb-4">
               Status: {meeting.status}
             </p>
             <div className="flex gap-4">
-              <button className="bg-blue-500 text-white text-sm px-4 py-2 rounded-lg hover:bg-blue-600 transition">
-                View Booking
+              <button
+                onClick={() => handleBookingRequest(meeting.id)} // Pass meeting ID on click
+                className="bg-blue-500 text-white text-sm px-4 py-2 rounded-lg hover:bg-blue-600 transition"
+              >
+                Booking Request
               </button>
               <button className="bg-red-500 text-white text-sm px-4 py-2 rounded-lg hover:bg-red-600 transition">
                 Cancel
@@ -199,13 +207,6 @@ const EventPage = () => {
             </div>
           </div>
         ))}
-      </div>
-
-      {/* Create Event Button */}
-      <div className="mt-10 flex justify-center">
-        <button className="bg-gradient-to-r from-green-400 to-green-600 text-white text-lg px-6 py-3 rounded-full shadow-lg hover:scale-105 transform transition-all">
-          Create New Event
-        </button>
       </div>
     </div>
   );
