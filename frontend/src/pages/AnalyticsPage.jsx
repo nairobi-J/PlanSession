@@ -45,88 +45,100 @@ const AnalyticsPage = () => {
     fetchAnalytics();
   }, []);
 
-  if (loading) return <div className="text-center text-lg">Loading...</div>;
-  if (error) return <div className="text-center text-red-500">{error}</div>;
-
   const renderData = () => {
     switch (filter) {
       case "startTime":
         return (
-          <ul className="bg-gray-100 p-4 rounded-lg">
+          <ul className="space-y-4">
             {analytics.startTime.map((item, index) => (
-              <li key={index} className="mb-2">
-                <strong>Hour:</strong> {item.meeting_hour} <strong>Meetings:</strong> {item.total_meetings}
+              <li key={index} className="flex justify-between bg-gray-100 p-4 rounded-lg shadow-sm">
+                <span className="font-medium text-gray-700">Hour: {item.meeting_hour}</span>
+                <span className="font-bold text-blue-600">Meetings: {item.total_meetings}</span>
               </li>
             ))}
           </ul>
         );
       case "duration":
         return (
-          <ul className="bg-gray-100 p-4 rounded-lg">
+          <ul className="space-y-4">
             {analytics.duration.map((item, index) => (
-              <li key={index} className="mb-2">
-                <strong>Category:</strong> {item.duration_category} <strong>Meetings:</strong> {item.total_meetings}
+              <li key={index} className="flex justify-between bg-gray-100 p-4 rounded-lg shadow-sm">
+                <span className="font-medium text-gray-700">Category: {item.duration_category}</span>
+                <span className="font-bold text-green-600">Meetings: {item.total_meetings}</span>
               </li>
             ))}
           </ul>
         );
       case "topUsers":
         return (
-          <ol className="bg-gray-100 p-4 rounded-lg">
+          <ul className="space-y-4">
             {analytics.topUsers.map((user, index) => (
-              <li key={index} className="mb-2">
-                <strong>User ID:</strong> {user.userId} <strong>Total Meetings:</strong> {user.total_meetings}
+              <li key={index} className="flex justify-between bg-gray-100 p-4 rounded-lg shadow-sm">
+                <span className="font-medium text-gray-700">User ID: {user.userId}</span>
+                <span className="font-bold text-purple-600">Meetings: {user.total_meetings}</span>
               </li>
             ))}
-          </ol>
+          </ul>
         );
       case "peakDays":
         return (
-          <ul className="bg-gray-100 p-4 rounded-lg">
+          <ul className="space-y-4">
             {analytics.peakDays.map((day, index) => (
-              <li key={index} className="mb-2">
-                <strong>Day:</strong> {day.meeting_day} <strong>Meetings:</strong> {day.total_meetings}
+              <li key={index} className="flex justify-between bg-gray-100 p-4 rounded-lg shadow-sm">
+                <span className="font-medium text-gray-700">Day: {day.meeting_day}</span>
+                <span className="font-bold text-indigo-600">Meetings: {day.total_meetings}</span>
               </li>
             ))}
           </ul>
         );
       case "averageDuration":
         return (
-          <div className="bg-gray-100 p-4 rounded-lg">
-            <strong>Average Duration:</strong> {Math.round(analytics.averageDuration)} minutes
+          <div className="flex justify-center items-center bg-gray-100 p-6 rounded-lg shadow-sm">
+            <span className="text-lg font-semibold text-gray-700">
+              Average Duration:{" "}
+              <span className="text-orange-500 font-bold">{Math.round(analytics.averageDuration)} minutes</span>
+            </span>
           </div>
         );
       default:
-        return <div>Select a valid filter.</div>;
+        return <div className="text-center text-red-500">Select a valid filter.</div>;
     }
   };
 
   return (
-    <div className="container mx-auto p-6">
-      <h1 className="text-2xl font-bold text-center mb-6">Analytics Insights</h1>
+    <div className="container mx-auto p-6 min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+      <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg p-8">
+        <h1 className="text-3xl font-extrabold text-center mb-8 text-gray-800">Analytics Dashboard</h1>
 
-      <div className="mb-4">
-        <label htmlFor="filter" className="block text-sm font-medium text-gray-700 mb-2">
-          Filter Analysis:
-        </label>
-        <select
-          id="filter"
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-          className="block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-        >
-          <option value="startTime">Meeting Start Times</option>
-          <option value="duration">Meeting Durations</option>
-          <option value="topUsers">Top Users</option>
-          <option value="peakDays">Peak Days</option>
-          <option value="averageDuration">Average Duration</option>
-        </select>
+        <div className="mb-8">
+          <label htmlFor="filter" className="block text-lg font-medium text-gray-700 mb-2">
+            Choose Analysis Type:
+          </label>
+          <select
+            id="filter"
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+            className="w-full p-3 bg-white border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="startTime">Meeting Start Times</option>
+            <option value="duration">Meeting Durations</option>
+            <option value="topUsers">Top Users</option>
+            <option value="peakDays">Peak Days</option>
+            <option value="averageDuration">Average Duration</option>
+          </select>
+        </div>
+
+        <div>
+          <h2 className="text-xl font-semibold text-gray-700 mb-4">Analysis Results</h2>
+          {loading ? (
+            <div className="text-center text-blue-500 font-medium animate-pulse">Loading...</div>
+          ) : error ? (
+            <div className="text-center text-red-500">{error}</div>
+          ) : (
+            renderData()
+          )}
+        </div>
       </div>
-
-      <section className="mb-8">
-        <h2 className="text-xl font-semibold mb-4">Analysis Results</h2>
-        {renderData()}
-      </section>
     </div>
   );
 };

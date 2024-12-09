@@ -52,15 +52,15 @@ const checkBookingConflict = async (req, res) => {
 };
 
 const resolveConflict = async (req, res) => {
-    const { EventID, ConflictingEventID } = req.body;
+    const { eventId, conflictingEventId } = req.body;
 
     const insertConflictQuery = `
-        INSERT INTO ConflictResolution (EventID, ConflictingEventID)
+        INSERT INTO conflictresolution (eventID, conflictingEventID)
         VALUES (?, ?)
     `;
 
     try {
-        const [results] = await pool.execute(insertConflictQuery, [EventID, ConflictingEventID]);
+        const [results] = await pool.execute(insertConflictQuery, [eventId, conflictingEventId]);
 
         res.status(201).send({ message: 'Conflict logged successfully.', ConflictID: results.insertId });
     } catch (err) {
@@ -74,7 +74,7 @@ const getConflicts = async (req, res) => {
         SELECT cr.ConflictID, cr.Timestamp, 
                e1.name AS EventName, e1.date AS EventDate, e1.startTime AS EventStartTime, e1.endTime AS EventEndTime,
                e2.name AS ConflictingEventName, e2.date AS ConflictingEventDate, e2.startTime AS ConflictingEventStartTime, e2.endTime AS ConflictingEventEndTime
-        FROM ConflictResolution cr
+        FROM conflictresolution cr
         JOIN events e1 ON cr.EventID = e1.id
         JOIN events e2 ON cr.ConflictingEventID = e2.id
         ORDER BY cr.Timestamp DESC
