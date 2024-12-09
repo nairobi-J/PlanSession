@@ -146,7 +146,7 @@ const Modal = ({ onClose, modalType }) => {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm flex flex-col gap-2 items-center justify-center">
       <form
-        className="flex flex-col gap-4 justify-center items-center bg-blue-100 rounded-md p-6 w-[450px] sm:w-[500px] lg:w-[600px]"
+        className="flex flex-col gap-4 justify-center items-center bg-green-100 rounded-md p-6 w-[450px] sm:w-[500px] lg:w-[600px]"
         onSubmit={handleSubmit}
       >
         {/* Cross Button at the Top Right */}
@@ -232,7 +232,7 @@ const Modal = ({ onClose, modalType }) => {
     {modalType === 'login' && 
       ( <button
        type="submit" onClick={handleLogin}
-       className="bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-lg w-full"
+       className="bg-green-400 hover:bg-white hover:text-black text-white p-3 rounded-lg w-full"
      >
        Log In
      </button>)
@@ -240,7 +240,7 @@ const Modal = ({ onClose, modalType }) => {
     {modalType === 'guest' && 
       ( <button
        type="submit" onClick={handleSubmit}
-       className="bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-lg w-full"
+       className="bg-green-400 hover:bg-white hover:text-black text-white p-3 rounded-lg w-full"
      >
        Guest Sign In
      </button>)
@@ -248,7 +248,7 @@ const Modal = ({ onClose, modalType }) => {
     {modalType === 'host' && 
       ( <button
        type="submit" onClick={handleSubmit}
-       className="bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-lg w-full"
+       className="bg-green-400 hover:bg-white hover:text-black text-white p-3 rounded-lg w-full"
      >
        Host Sign In
      </button>)
